@@ -1,0 +1,79 @@
+#include "Bullet.h"
+#include "Gamemode.h"
+#include "audio/include/AudioEngine.h"
+
+USING_NS_CC;
+
+bool Bullet::init() {
+    if (!Sprite::init()) return false;
+    this->scheduleUpdate();
+    return true;
+}
+
+void Bullet::setup(const Vec2& startPos, const cocos2d::Vec2& direction, float angle) {
+    std::string texture = "Bullet.png";
+    this->initWithFile(texture);
+    velocity = direction.getNormalized() * 150.0f;
+    this->setPosition(startPos);
+    this->setRotation(CC_RADIANS_TO_DEGREES(-velocity.getAngle()));
+    this->setAnchorPoint(Vec2(0.5f, 0.5f));
+    maxBounce = 5;
+
+    // 计算方向向量
+    float radians = CC_DEGREES_TO_RADIANS(-angle);
+}
+
+void Bullet::update(float delta) {
+    Vec2 newPos = this->getPosition() + velocity * delta;
+
+    // 预测位置检查
+    auto scene = dynamic_cast<Gamemode*>(this->getParent());
+    if (scene && !scene->CheckPosition(newPos)) {
+        handleWallCollision();
+    }
+    else {
+        this->setPosition(newPos);
+    }
+}
+void Bullet::handleWallCollision() {
+    /*auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 pos = this->getPosition();
+    bool hitWall = false;
+    if (hitWall) {
+        // 更新旋转角度
+        this->setRotation(CC_RADIANS_TO_DEGREES(-_direction.getAngle()) - 90);
+
+        // 处理反弹次数
+        if (++_currentBounce >= _maxBounce) {
+            destroyBullet();
+        }
+    }*/
+
+    auto scene = dynamic_cast<Gamemode*>(this->getParent());
+    bool bounceX = false, bounceY = false;
+    Vec2 tilePos = scene->NowPosition(this->getPosition());
+
+    // 检查四周的墙
+    if (scene->isWall(tilePos + Vec2(1, 0)) || scene->isWall(tilePos + Vec2(-1, 0))) {
+        velocity.x *= -1;
+        bounceX = true;
+    }
+    if (scene->isWall(tilePos + Vec2(0, 1)) || scene->isWall(tilePos + Vec2(0, -1))) {
+        velocity.y *= -1;
+        bounceY = true;
+    }
+
+    if (bounceX || bounceY) {
+        currentBounce++;
+
+        // 更新旋转角度
+        this->setRotation(CC_RADIANS_TO_DEGREES(-velocity.getAngle()));
+
+        if (currentBounce >= maxBounce) {
+            destroyBullet();
+        }
+    }
+}
+void Bullet::destroyBullet() {
+    this->removeFromParent();
+}
