@@ -19,14 +19,12 @@ public:
     cocos2d::Vector<Bullet*> activeBullets;
     void checkBulletCollisions();
 private:
-    //cocos2d::Sprite* Tank1;
     Tank* Tank1;
     cocos2d::Vec2 velocity;
-    
+    bool isCircleCollision(const cocos2d::Vec2& center1, float radius1, const cocos2d::Vec2& center2, float radius2);
     float fireCooldown = 0.0f;
     float targetRotation;
     void Shoot();
-    void fire();
     //void update(float delta) override;
     //void updateRotation(float delta);
     

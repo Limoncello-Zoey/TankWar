@@ -21,7 +21,6 @@ bool Gamemode::init()
 {
 
     if (!Scene::init()) return false;
-
     MapSetUp();
     initTank();
     //Tank1 = Sprite::create("Tankbody.png");
@@ -40,21 +39,22 @@ bool Gamemode::init()
 
 void Gamemode::MapSetUp() {
     walls = {
-    {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0},
-    {1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
-    {1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,0},
-    {1,0,0,0,1,1,0,0,1,0,0,0,1,1,1,0,0,1,0},
-    {1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0},
-    {1,0,0,0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0},
-    {1,1,1,1,1,1,0,0,1,0,0,0,0,0,1,0,0,1,0},
-    {1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0},
-    {1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0},
-    {1,0,1,1,0,1,0,0,1,0,0,0,1,1,1,0,0,1,0},
-    {1,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0},
-    {1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0},
-    {1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0},
-    {1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0}
-
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
+    {0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0},
+    {0,1,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,1,1,0,0,1,0,0,0,1,1,1,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0},
+    {0,1,1,1,1,1,1,0,0,1,0,0,0,0,0,1,0,0,1,0},
+    {0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0},
+    {0,1,0,1,1,0,1,0,0,1,0,0,0,1,1,1,0,0,1,0},
+    {0,1,0,1,0,0,0,0,0,1,0,0,0,1,0,0,0,0,1,0},
+    {0,1,0,1,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,1,0},
+    {0,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,0},
+    {0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0},
     };
 
     const Color4F WALL_COLOR(0.3f, 0.3f, 0.3f, 1.0f);
@@ -77,7 +77,7 @@ void Gamemode::MapSetUp() {
 
 void Gamemode::initTank() {
     Tank1 = Tank::create();
-    Tank1->setPosition(40.0f + GRID_SIZE * 1.1f, 20.0f + GRID_SIZE * 1.1f);
+    Tank1->setPosition(80.0f + GRID_SIZE * 1.1f, 60.0f + GRID_SIZE * 1.1f);
     addChild(Tank1);
 }
 
@@ -298,8 +298,12 @@ bool Gamemode::checkCollision(const Vec2& pos) {
 void Gamemode::checkBulletCollisions() {
     for (ssize_t i = 0; i < activeBullets.size(); ++i) {
         auto bullet = activeBullets.at(i);
+        Vec2 center1 = bullet->getPosition();
+        Vec2 center2 = Tank1->getPosition();
+        float radius1 = bullet->getContentSize().width / 2;
+        float radius2 = Tank1->getContentSize().width / 2;
         // ¼ì²âÇ½±ÚÅö×²
-        if (bullet->getBoundingBox().intersectsRect(Tank1->getBoundingBox())) {
+        if (isCircleCollision(center1, radius1, center2, radius2)) {
             bullet->removeFromParent();
             activeBullets.erase(i--);
             continue;
@@ -317,7 +321,7 @@ void Gamemode::checkBulletCollisions() {
         }
     }*/
 }
-bool Gamemode::BcheckCollision(const Vec2& pos) {
+/*bool Gamemode::BcheckCollision(const Vec2& pos) {
 
     for (auto bullet : activeBullets) {
         // ¼ì²âÓë½ÇÉ«µÄÅö×²
@@ -326,7 +330,7 @@ bool Gamemode::BcheckCollision(const Vec2& pos) {
         }
         return false;
     }
-}
+}*/
 bool Gamemode::CheckPosition(const Vec2& pos) {
     Vec2 tilePos = Vec2(
         static_cast<int>((pos.x) / GRID_SIZE),
@@ -338,4 +342,8 @@ bool Gamemode::isWall(const Vec2& tilePos) {
     int x = static_cast<int>(tilePos.x);
     int y = static_cast<int>(tilePos.y);
     return walls[y][x];
+}
+bool Gamemode::isCircleCollision(const Vec2& center1, float radius1, const Vec2& center2, float radius2) {
+    float distance = center1.distance(center2);
+    return distance <= (radius1 + radius2);
 }

@@ -18,7 +18,7 @@ bool Tank::init() {
 
 void Tank::fire() {
     auto scene = dynamic_cast<Gamemode*>(this->getParent());
-    const float offset = 60.0f;
+    const float offset = 40.0f;
     float radians = CC_DEGREES_TO_RADIANS(-this->getRotation());
     Vec2 spawnPos = this->getPosition() +
         Vec2(cos(radians), sin(radians)) * offset;
