@@ -9,14 +9,16 @@ USING_NS_CC;
 const float ROTATION_SPEED = 360.0f;
 const float ANGLE_THRESHOLD = 5.0f;
 
-bool Tank::init() {
+bool Tank::init() 
+{
     if (!Sprite::initWithFile("Tankbody.png")) return false;
     setAnchorPoint(Vec2(0.5f, 0.5f));
     this->scheduleUpdate();
     return true;
 }
 
-void Tank::fire() {
+void Tank::fire() 
+{
     auto scene = dynamic_cast<Gamemode*>(this->getParent());
     const float offset = 40.0f;
     float radians = CC_DEGREES_TO_RADIANS(-this->getRotation());
@@ -29,7 +31,8 @@ void Tank::fire() {
     //activeBullets.pushBack(bullet);
     addChild(bullet);*/
 }
-void Tank::update(float delta) {
+void Tank::update(float delta) 
+{
     auto scene = dynamic_cast<Gamemode*>(this->getParent());
     // 计算新位置
     float radians = CC_DEGREES_TO_RADIANS(-this->getRotation());
@@ -40,21 +43,26 @@ void Tank::update(float delta) {
         Tank1->setPosition(newPos);
     }*/
     Vec2 newPosx(this->getPositionX() + forwardx * velocity.length() * delta, this->getPositionY());
-    if (!scene->checkCollision(newPosx)) {
+    if (!scene->checkCollision(newPosx)) 
+    {
         this->setPosition(newPosx);
     }
     Vec2 newPosy(this->getPositionX(), this->getPositionY() + forwardy * velocity.length() * delta);
-    if (!scene->checkCollision(newPosy)) {
+    if (!scene->checkCollision(newPosy)) 
+    {
         this->setPosition(newPosy);
     }
     updateRotation(delta);
-    if (fireCooldown > 0) {
+    if (fireCooldown > 0) 
+    {
         fireCooldown -= delta;
     }
     scene->checkBulletCollisions();
 }
-void Tank::updateRotation(float delta) {
-    if (velocity != Vec2::ZERO) {
+void Tank::updateRotation(float delta) 
+{
+    if (velocity != Vec2::ZERO) 
+    {
         // 计算目标角度（弧度转角度，转换为顺时针）
         float newAngle = CC_RADIANS_TO_DEGREES(velocity.getAngle()) * -1;
 
@@ -76,7 +84,8 @@ void Tank::updateRotation(float delta) {
         this->setRotation(targetRotation);
     }
 }
-void Tank::Controls() {
+void Tank::Controls() 
+{
     auto listener = EventListenerKeyboard::create();
 
     // 按键按下

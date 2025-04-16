@@ -22,14 +22,10 @@ bool Gamemode::init()
 
     if (!Scene::init()) return false;
     MapSetUp();
-    initTank();
-    //Tank1 = Sprite::create("Tankbody.png");
-    //Tank1->setAnchorPoint(Vec2(0.5f, 0.5f));
-    //Tank1->setPosition(40.0f + GRID_SIZE * 1.1f,20.0f + GRID_SIZE * 1.1f);
-    //addChild(Tank1);
 
+    initTank();
     Tank1->Controls();
-    //bool checkCollision(const cocos2d::Vec2& pos);
+
     scheduleUpdate();
     Shoot();
     return true;

@@ -36,19 +36,7 @@ void Bullet::update(float delta) {
     }
 }
 void Bullet::handleWallCollision() {
-    /*auto visibleSize = Director::getInstance()->getVisibleSize();
-    Vec2 pos = this->getPosition();
-    bool hitWall = false;
-    if (hitWall) {
-        // 更新旋转角度
-        this->setRotation(CC_RADIANS_TO_DEGREES(-_direction.getAngle()) - 90);
-
-        // 处理反弹次数
-        if (++_currentBounce >= _maxBounce) {
-            destroyBullet();
-        }
-    }*/
-
+    
     auto scene = dynamic_cast<Gamemode*>(this->getParent());
     bool bounceX = false, bounceY = false;
     Vec2 tilePos = scene->NowPosition(this->getPosition());
