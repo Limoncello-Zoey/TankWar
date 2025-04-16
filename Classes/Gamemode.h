@@ -41,6 +41,8 @@ public:
     void initTank();
     bool CheckPosition(const cocos2d::Vec2& pos);           //检查是否撞墙（f坐标）
     bool isWall(const cocos2d::Vec2& tilePos);              //检查是否撞墙（int坐标）
+    float distancex(const cocos2d::Vec2& tilePos);
+    float distancey(const cocos2d::Vec2& tilePos);
     cocos2d::Vec2 NowPosition(const cocos2d::Vec2& pos);    //f坐标转int坐标
     bool checkCollision(const cocos2d::Vec2& pos);          //检查坦克是否装墙
     void spawnBullet(const cocos2d::Vec2& spawnpos,float radians);//开火
