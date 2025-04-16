@@ -26,6 +26,11 @@ bool Gamemode::init()
     initTank();
     Tank1->Controls();
 
+    auto visiblesize = Director::getInstance()->getVisibleSize();
+    _camera=Camera::createOrthographic(visiblesize.width, visiblesize.height, 0, 1000);
+    this->addChild(_camera);
+
+
     scheduleUpdate();
     Shoot();
     return true;

@@ -18,6 +18,9 @@ public:
     Tank* Tank1;
     cocos2d::Vec2 velocity;
 
+    //camera
+    cocos2d::Camera* _camera;
+
     //settings
     float fireCooldown = 0.0f;
     float targetRotation;
