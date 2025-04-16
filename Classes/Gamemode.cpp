@@ -104,7 +104,7 @@ void Gamemode::spawnBullet(const Vec2& spawnPos,float radians)
 {
     auto bullet = Bullet::create();
     Vec2 direction = Vec2(cos(radians), sin(radians));
-    bullet->setup(spawnPos, direction, 800.0f);
+    bullet->setup(spawnPos, direction);
     activeBullets.pushBack(bullet);
     addChild(bullet);
 }

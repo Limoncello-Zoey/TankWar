@@ -1,6 +1,7 @@
 #include "Bullet.h"
 #include "Gamemode.h"
 #include "audio/include/AudioEngine.h"
+#include <iostream>
 
 USING_NS_CC;
 
@@ -10,7 +11,7 @@ bool Bullet::init() {
     return true;
 }
 
-void Bullet::setup(const Vec2& startPos, const cocos2d::Vec2& direction, float angle) {
+void Bullet::setup(const Vec2& startPos, const cocos2d::Vec2& direction) {
     std::string texture = "Bullet.png";
     this->initWithFile(texture);
     velocity = direction.getNormalized() * 50.0f;
@@ -18,9 +19,6 @@ void Bullet::setup(const Vec2& startPos, const cocos2d::Vec2& direction, float a
     this->setRotation(CC_RADIANS_TO_DEGREES(-velocity.getAngle()));
     this->setAnchorPoint(Vec2(0.5f, 0.5f));
     maxBounce = 5;
-
-    // 计算方向向量
-    float radians = CC_DEGREES_TO_RADIANS(-angle);
 }
 
 void Bullet::update(float delta) {
@@ -39,10 +37,12 @@ void Bullet::handleWallCollision() {
     
     auto scene = dynamic_cast<Gamemode*>(this->getParent());
     bool bounceX = false, bounceY = false;
+    Vec2 Pos = this->getPosition();
     Vec2 tilePos = scene->NowPosition(this->getPosition());
-    if ((scene->isWall(tilePos + Vec2(1, 0)) || scene->isWall(tilePos + Vec2(-1, 0)))&& (scene->isWall(tilePos + Vec2(0, 1)) || scene->isWall(tilePos + Vec2(0, -1)))) {
+    if ((scene->isWall(tilePos + Vec2(1, 0)) || scene->isWall(tilePos + Vec2(-1, 0))) && (scene->isWall(tilePos + Vec2(0, 1)) || scene->isWall(tilePos + Vec2(0, -1)))) {
         float closedisx = scene->distancex(tilePos);
         float closedisy = scene->distancey(tilePos);
+        //std::cout << closedisx << "  " << closedisy << std::endl;
         if (closedisx > closedisy) velocity.y *= -1;
         else velocity.x *= -1;
         currentBounce++;
