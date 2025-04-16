@@ -14,7 +14,7 @@ bool Bullet::init() {
 void Bullet::setup(const Vec2& startPos, const cocos2d::Vec2& direction) {
     std::string texture = "Bullet.png";
     this->initWithFile(texture);
-    velocity = direction.getNormalized() * 50.0f;
+    velocity = direction.getNormalized() * 100.0f;
     this->setPosition(startPos);
     this->setRotation(CC_RADIANS_TO_DEGREES(-velocity.getAngle()));
     this->setAnchorPoint(Vec2(0.5f, 0.5f));
@@ -40,8 +40,8 @@ void Bullet::handleWallCollision() {
     Vec2 Pos = this->getPosition();
     Vec2 tilePos = scene->NowPosition(this->getPosition());
     if ((scene->isWall(tilePos + Vec2(1, 0)) || scene->isWall(tilePos + Vec2(-1, 0))) && (scene->isWall(tilePos + Vec2(0, 1)) || scene->isWall(tilePos + Vec2(0, -1)))) {
-        float closedisx = scene->distancex(tilePos);
-        float closedisy = scene->distancey(tilePos);
+        float closedisx = scene->distancex(Pos);
+        float closedisy = scene->distancey(Pos);
         //std::cout << closedisx << "  " << closedisy << std::endl;
         if (closedisx > closedisy) velocity.y *= -1;
         else velocity.x *= -1;

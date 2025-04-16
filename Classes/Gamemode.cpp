@@ -197,19 +197,23 @@ bool Gamemode::isCircleCollision(const Vec2& center1, float radius1, const Vec2&
     float distance = center1.distance(center2);
     return distance <= (radius1 + radius2);
 }
-float Gamemode::distancex(const Vec2& tilePos) {
+float Gamemode::distancex(const Vec2& Pos) {
+    Vec2 tilePos = NowPosition(Pos);
     int x = static_cast<int>(tilePos.x);
     int y = static_cast<int>(tilePos.y);
+    if (walls[y][x]) return 0;
     float closedisx = 1e7;
-    if (walls[y][x - 1]) closedisx = tilePos.x - x + 1;
-    if (walls[y][x + 1]) closedisx = closedisx > x + 1 - tilePos.x ? x + 1 - tilePos.x : closedisx;
+    if (walls[y][x - 1]) closedisx = Pos.x - (x - 1) * GRID_SIZE;
+    if (walls[y][x + 1]) closedisx = closedisx > (x + 1) * GRID_SIZE - Pos.x ? (x + 1) * GRID_SIZE - Pos.x : closedisx;
     return closedisx;
 }
-float Gamemode::distancey(const Vec2& tilePos) {
+float Gamemode::distancey(const Vec2& Pos) {
+    Vec2 tilePos = NowPosition(Pos);
     int x = static_cast<int>(tilePos.x);
     int y = static_cast<int>(tilePos.y);
+    if (walls[y][x]) return 0;
     float closedisy = 1e7;
-    if (walls[y - 1][x]) closedisy = tilePos.y - y + 1;
-    if (walls[y + 1][x]) closedisy = closedisy > y + 1 -tilePos.y  ? y + 1 - tilePos.y : closedisy;
+    if (walls[y - 1][x]) closedisy = Pos.y - (y - 1) * GRID_SIZE;
+    if (walls[y + 1][x]) closedisy = closedisy > (y + 1) * GRID_SIZE -Pos.y  ? (y + 1) * GRID_SIZE - Pos.y : closedisy;
     return closedisy;
 }
