@@ -1,17 +1,17 @@
-E:\workwork\tank-war\cocos2d\external\recast\DebugUtils\DebugDraw.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DebugDraw.obj
-E:\workwork\tank-war\cocos2d\external\recast\DebugUtils\DetourDebugDraw.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourDebugDraw.obj
-E:\workwork\tank-war\cocos2d\external\recast\DetourCrowd\DetourCrowd.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourCrowd.obj
-E:\workwork\tank-war\cocos2d\external\recast\DetourCrowd\DetourLocalBoundary.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourLocalBoundary.obj
-E:\workwork\tank-war\cocos2d\external\recast\DetourCrowd\DetourObstacleAvoidance.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourObstacleAvoidance.obj
-E:\workwork\tank-war\cocos2d\external\recast\DetourCrowd\DetourPathCorridor.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourPathCorridor.obj
-E:\workwork\tank-war\cocos2d\external\recast\DetourCrowd\DetourPathQueue.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourPathQueue.obj
-E:\workwork\tank-war\cocos2d\external\recast\DetourCrowd\DetourProximityGrid.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourProximityGrid.obj
-E:\workwork\tank-war\cocos2d\external\recast\DetourTileCache\DetourTileCache.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourTileCache.obj
-E:\workwork\tank-war\cocos2d\external\recast\DetourTileCache\DetourTileCacheBuilder.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourTileCacheBuilder.obj
-E:\workwork\tank-war\cocos2d\external\recast\Detour\DetourAlloc.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourAlloc.obj
-E:\workwork\tank-war\cocos2d\external\recast\Detour\DetourCommon.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourCommon.obj
-E:\workwork\tank-war\cocos2d\external\recast\Detour\DetourNavMesh.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourNavMesh.obj
-E:\workwork\tank-war\cocos2d\external\recast\Detour\DetourNavMeshBuilder.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourNavMeshBuilder.obj
-E:\workwork\tank-war\cocos2d\external\recast\Detour\DetourNavMeshQuery.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourNavMeshQuery.obj
-E:\workwork\tank-war\cocos2d\external\recast\Detour\DetourNode.cpp;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourNode.obj
-E:\workwork\tank-war\cocos2d\external\recast\fastlz\fastlz.c;E:\workwork\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\fastlz.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\DebugUtils\DebugDraw.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DebugDraw.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\DebugUtils\DetourDebugDraw.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourDebugDraw.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\DetourCrowd\DetourCrowd.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourCrowd.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\DetourCrowd\DetourLocalBoundary.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourLocalBoundary.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\DetourCrowd\DetourObstacleAvoidance.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourObstacleAvoidance.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\DetourCrowd\DetourPathCorridor.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourPathCorridor.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\DetourCrowd\DetourPathQueue.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourPathQueue.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\DetourCrowd\DetourProximityGrid.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourProximityGrid.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\DetourTileCache\DetourTileCache.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourTileCache.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\DetourTileCache\DetourTileCacheBuilder.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourTileCacheBuilder.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\Detour\DetourAlloc.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourAlloc.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\Detour\DetourCommon.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourCommon.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\Detour\DetourNavMesh.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourNavMesh.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\Detour\DetourNavMeshBuilder.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourNavMeshBuilder.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\Detour\DetourNavMeshQuery.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourNavMeshQuery.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\Detour\DetourNode.cpp;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\DetourNode.obj
+D:\Visual Studio\Project\tank-war\cocos2d\external\recast\fastlz\fastlz.c;D:\Visual Studio\Project\tank-war\cocos2d\external\recast\proj.win32\Debug.win32\fastlz.obj
