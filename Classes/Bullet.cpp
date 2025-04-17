@@ -14,7 +14,7 @@ bool Bullet::init() {
 void Bullet::setup(const Vec2& startPos, const cocos2d::Vec2& direction) {
     std::string texture = "Bullet.png";
     this->initWithFile(texture);
-    velocity = direction.getNormalized() * 100.0f;
+    velocity = direction.getNormalized() * 150.0f;
     this->setPosition(startPos);
     this->setRotation(CC_RADIANS_TO_DEGREES(-velocity.getAngle()));
     this->setAnchorPoint(Vec2(0.5f, 0.5f));

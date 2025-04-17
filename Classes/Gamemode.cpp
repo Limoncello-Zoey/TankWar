@@ -47,7 +47,7 @@ void Gamemode::MapSetUp()
     {0,1,0,0,0,1,0,0,0,1,0,0,0,0,0,0,0,0,1,0},
     {0,1,0,0,0,1,1,0,0,1,0,0,0,1,1,1,0,0,1,0},
     {0,1,0,0,0,0,0,0,0,1,0,0,0,0,0,1,0,0,1,0},
-    {0,1,0,0,1,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0},
+    {0,1,0,0,0,0,0,0,0,1,1,1,0,0,0,1,0,0,1,0},
     {0,1,1,1,1,1,1,0,0,1,0,0,0,0,0,1,0,0,1,0},
     {0,1,0,0,0,0,1,0,0,0,0,0,0,0,0,0,0,0,1,0},
     {0,1,0,0,0,0,1,0,0,1,0,0,0,0,0,0,0,0,1,0},
@@ -203,7 +203,7 @@ float Gamemode::distancex(const Vec2& Pos) {
     int y = static_cast<int>(tilePos.y);
     if (walls[y][x]) return 0;
     float closedisx = 1e7;
-    if (walls[y][x - 1]) closedisx = Pos.x - (x - 1) * GRID_SIZE;
+    if (walls[y][x - 1]) closedisx = Pos.x - x * GRID_SIZE;
     if (walls[y][x + 1]) closedisx = closedisx > (x + 1) * GRID_SIZE - Pos.x ? (x + 1) * GRID_SIZE - Pos.x : closedisx;
     return closedisx;
 }
@@ -213,7 +213,7 @@ float Gamemode::distancey(const Vec2& Pos) {
     int y = static_cast<int>(tilePos.y);
     if (walls[y][x]) return 0;
     float closedisy = 1e7;
-    if (walls[y - 1][x]) closedisy = Pos.y - (y - 1) * GRID_SIZE;
+    if (walls[y - 1][x]) closedisy = Pos.y - y * GRID_SIZE;
     if (walls[y + 1][x]) closedisy = closedisy > (y + 1) * GRID_SIZE -Pos.y  ? (y + 1) * GRID_SIZE - Pos.y : closedisy;
     return closedisy;
 }
