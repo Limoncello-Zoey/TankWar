@@ -29,7 +29,11 @@ bool Gamemode::init()
     auto visiblesize = Director::getInstance()->getVisibleSize();
     _camera=Camera::createOrthographic(visiblesize.width, visiblesize.height, 0, 1000);
     this->addChild(_camera);
+	_camera->setCameraFlag(CameraFlag::USER1);
 
+
+    Vec3 newCameraPos(100, 100, 0); // 可根据需求修改坐标
+    _camera->setPosition3D(newCameraPos);
 
     scheduleUpdate();
     Shoot();
