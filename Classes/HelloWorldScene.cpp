@@ -55,17 +55,7 @@ bool HelloWorld::init()
     Sprite* background = Sprite::create("background.png");
     background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
     this->addChild(background, 0); 
-    // create menu, it's an autorelease object
-    //auto menu = Menu::create(closeItem, NULL);
-    //menu->setPosition(Vec2::ZERO);
-    //this->addChild(menu, 1);
 
-    /////////////////////////////
-    // 3. add your codes below...
-
-
-    // add "HelloWorld" splash screen"
-   
     CCMenuItemLabel* gamestartItem = CCMenuItemLabel::create(CCLabelTTF::create("GameStart","Arial",60),this,menu_selector(HelloWorld::menuStartCallback));
     gamestartItem->setPosition(Vec2(405, 135));
     CCMenu* startmenu = CCMenu::createWithItem(gamestartItem);
