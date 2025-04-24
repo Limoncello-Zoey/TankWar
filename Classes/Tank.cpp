@@ -8,14 +8,15 @@ USING_NS_CC;
 
 const float ROTATION_SPEED = 360.0f;
 const float ANGLE_THRESHOLD = 5.0f;
+float Tank::radius;
 
 bool Tank::init() 
 {
     if (!Sprite::initWithFile("Tankbody.png")) return false;
     setAnchorPoint(Vec2(0.5f, 0.5f));
-    this->scheduleUpdate();
-
     RegisterControls();
+    this->scheduleUpdate();
+	radius = this->getContentSize().width / 2;
     return true;
 }
 
@@ -55,7 +56,6 @@ void Tank::update(float delta)
     {
         fireCooldown -= delta;
     }
-    scene->checkBulletCollisions();
 }
 void Tank::updateRotation(float delta) 
 {

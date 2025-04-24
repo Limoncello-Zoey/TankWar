@@ -1,5 +1,7 @@
 #include "Gameover.h"
 #include "Gamemode.h"
+#include "Tank.h"
+#include "Bullet.h"
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 
@@ -7,25 +9,26 @@ USING_NS_CC;
 
 const float ROTATION_SPEED = 360.0f;   
 const float ANGLE_THRESHOLD = 5.0f;
+Tank* Gamemode::Tank1=nullptr;
+std::vector<std::vector<int>> Gamemode::walls;
 
 Scene* Gamemode::createScene()
 {
     return Gamemode::create();
 }
 
-
-// Print useful error message instead of segfaulting when files are not there.
-
-
+const float Gamemode::GRID_SIZE = 45.0f;
 // on "init" you need to initialize your instance
 bool Gamemode::init()
 {
+
+
     if (!Scene::init()) return false;
     MapSetUp();
 
     initTank();
     //Tank1->Controls();
-    Tank1->RegisterControls();//×¢²á¼àÌýÆ÷
+    Gamemode::Tank1->RegisterControls();//×¢²á¼àÌýÆ÷
 
 
     Camera::getDefaultCamera()->setVisible(false);//½ûÓÃÄ¬ÈÏÏà»ú
@@ -37,13 +40,14 @@ bool Gamemode::init()
     _camera->setScale(0.6f);
     
     this->setCameraMask((unsigned short)CameraFlag::USER1,true);
-
-
-
-    //Shoot();//×¢²áÊó±ê¼àÌýÆ÷
     
 
     return true;
+}
+
+void Gamemode::update(float delta)
+{
+    //checkBulletCollisions();
 }
 
 void Gamemode::MapSetUp() 
@@ -90,9 +94,9 @@ void Gamemode::MapSetUp()
 
 void Gamemode::initTank() 
 {
-    Tank1 = Tank::create();
-    Tank1->setPosition(80.0f + GRID_SIZE * 1.1f, 60.0f + GRID_SIZE * 1.1f);
-    addChild(Tank1);
+    Gamemode::Tank1 = Tank::create();
+    Gamemode::Tank1->setPosition(80.0f + GRID_SIZE * 1.1f, 60.0f + GRID_SIZE * 1.1f);
+    addChild(Gamemode::Tank1);
 }
 
 
@@ -167,35 +171,35 @@ bool Gamemode::checkCollision(const Vec2& pos)
     return false;
 }
 
-void Gamemode::checkBulletCollisions() 
-{
-    for (ssize_t i = 0; i < activeBullets.size(); ++i) 
-    {
-        auto bullet = activeBullets.at(i);
-        Vec2 center1 = bullet->getPosition();
-        Vec2 center2 = Tank1->getPosition();
-        float radius1 = bullet->getContentSize().width / 2;
-        float radius2 = Tank1->getContentSize().width / 2;
-        // ¼ì²âÇ½±ÚÅö×²
-        if (isCircleCollision(center1, radius1, center2, radius2)) 
-        {
-            Scene* gameover = Gameover::createScene();
-            CCDirector::sharedDirector()->replaceScene(gameover);
-            bullet->removeFromParent();
-            activeBullets.erase(i--);
-            continue;
-        }
-    }
-}
+//void Gamemode::checkBulletCollisions()
+//{
+//    for (ssize_t i = 0; i < activeBullets.size(); ++i) 
+//    {
+//        auto bullet = activeBullets.at(i);
+//        Vec2 center1 = bullet->getPosition();
+//        Vec2 center2 = Tank1->getPosition();
+//        float radius1 = bullet->getContentSize().width / 2;
+//        float radius2 = Tank1->getContentSize().width / 2;
+//        // ¼ì²âÇ½±ÚÅö×²
+//        if (isCircleCollision(center1, radius1, center2, radius2)) 
+//        {
+//            Scene* gameover = Gameover::createScene();
+//            CCDirector::sharedDirector()->replaceScene(gameover);
+//            bullet->removeFromParent();
+//            activeBullets.erase(i--);
+//            continue;
+//        }
+//    }
+//}
 
-bool Gamemode::CheckPosition(const Vec2& pos) 
+bool Gamemode::CheckPosition(const Vec2& pos)
 {
     Vec2 tilePos = Vec2(
         static_cast<int>((pos.x) / GRID_SIZE),
         static_cast<int>(pos.y / GRID_SIZE));
     return !isWall(tilePos);
 }
-bool Gamemode::isWall(const Vec2& tilePos) 
+bool Gamemode::isWall(const Vec2& tilePos)
 {
     
     int x = static_cast<int>(tilePos.x);

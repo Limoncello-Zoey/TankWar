@@ -1,14 +1,19 @@
 #include "Bullet.h"
 #include "Gamemode.h"
+#include "Gameover.h"
+#include "Tank.h"
 #include "audio/include/AudioEngine.h"
 #include <iostream>
 
 USING_NS_CC;
 
+float Bullet::radius;
+
 bool Bullet::init() {
     if (!Sprite::init()) return false;
 	this->setCameraMask((unsigned short)CameraFlag::USER1, true);
     this->scheduleUpdate();
+	radius = this->getContentSize().width / 2;
     return true;
 }
 
@@ -24,7 +29,7 @@ void Bullet::setup(const Vec2& startPos, const cocos2d::Vec2& direction) {
 
 void Bullet::update(float delta) {
     Vec2 newPos = this->getPosition() + velocity * delta;
-
+    //¼ì²â×²Ç½
     // Ô¤²âÎ»ÖÃ¼ì²é
     auto scene = dynamic_cast<Gamemode*>(this->getParent());
     if (scene && !scene->CheckPosition(newPos)) {
@@ -33,7 +38,25 @@ void Bullet::update(float delta) {
     else {
         this->setPosition(newPos);
     }
+    //¼ì²â×²Ì¹¿Ë
+    checkBulletCollisions();
 }
+
+void Bullet::checkBulletCollisions()//¼ì²âÓëÌ¹¿ËÅö×²
+{
+    
+    Vec2 center1 = this->getPosition();
+    Vec2 center2 = Gamemode::Tank1->getPosition();
+    
+    if (Gamemode::isCircleCollision(center1, Bullet::radius, center2, Tank::radius))
+    {
+        Scene* gameover = Gameover::createScene();
+        Director::getInstance()->replaceScene(gameover);
+        this->removeFromParent();
+    }
+    
+}
+
 void Bullet::handleWallCollision() {
     
     auto scene = dynamic_cast<Gamemode*>(this->getParent());
