@@ -49,7 +49,7 @@ public:
     void checkBulletCollisions();                           //¼ì²é×Óµ¯Åö×²
 
     bool isCircleCollision(const cocos2d::Vec2& center1, float radius1, const cocos2d::Vec2& center2, float radius2);
-    void Shoot();
+    /*void Shoot();*/
     
 };
 

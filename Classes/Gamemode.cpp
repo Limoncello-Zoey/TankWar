@@ -24,7 +24,8 @@ bool Gamemode::init()
     MapSetUp();
 
     initTank();
-    Tank1->Controls();//×¢²á¼àÌýÆ÷
+    //Tank1->Controls();
+    Tank1->RegisterControls();//×¢²á¼àÌýÆ÷
 
 
     Camera::getDefaultCamera()->setVisible(false);//½ûÓÃÄ¬ÈÏÏà»ú
@@ -39,7 +40,7 @@ bool Gamemode::init()
 
 
 
-    Shoot();//×¢²áÊó±ê¼àÌýÆ÷
+    //Shoot();//×¢²áÊó±ê¼àÌýÆ÷
     
 
     return true;
@@ -95,18 +96,18 @@ void Gamemode::initTank()
 }
 
 
-void Gamemode::Shoot() 
-{
-    auto listener = EventListenerMouse::create();
-
-    // Êó±ê×ó¼üÉä»÷
-    listener->onMouseDown = [=](EventMouse* event) 
-        {
-            Tank1->fire();
-        };
-
-    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-}
+//void Gamemode::Shoot() 
+//{
+//    auto listener = EventListenerMouse::create();
+//
+//    // Êó±ê×ó¼üÉä»÷
+//    listener->onMouseDown = [=](EventMouse* event) 
+//        {
+//            Tank1->fire();
+//        };
+//
+//    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+//}
 void Gamemode::spawnBullet(const Vec2& spawnPos,float radians) 
 {
     auto bullet = Bullet::create();

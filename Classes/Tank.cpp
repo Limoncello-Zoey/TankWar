@@ -82,7 +82,46 @@ void Tank::updateRotation(float delta)
         this->setRotation(targetRotation);
     }
 }
-void Tank::Controls() 
+//void Tank::Controls() 
+//{
+//    auto listener = EventListenerKeyboard::create();
+//
+//    // 按键按下
+//    listener->onKeyPressed = [=](EventKeyboard::KeyCode key, Event* e) {
+//        switch (key) {
+//        case EventKeyboard::KeyCode::KEY_W:
+//            velocity.y = 100.0f; // 上移速度
+//            break;
+//        case EventKeyboard::KeyCode::KEY_S:
+//            velocity.y = -100.0f;
+//            break;
+//        case EventKeyboard::KeyCode::KEY_A:
+//            velocity.x = -100.0f;
+//            break;
+//        case EventKeyboard::KeyCode::KEY_D:
+//            velocity.x = 100.0f;
+//            break;
+//        }
+//        };
+//
+//    // 按键释放
+//    listener->onKeyReleased = [=](EventKeyboard::KeyCode key, Event* e) {
+//        switch (key) {
+//        case EventKeyboard::KeyCode::KEY_W:
+//        case EventKeyboard::KeyCode::KEY_S:
+//            velocity.y = 0.0f;
+//            break;
+//        case EventKeyboard::KeyCode::KEY_A:
+//        case EventKeyboard::KeyCode::KEY_D:
+//            velocity.x = 0.0f;
+//            break;
+//        }
+//        };
+//    //Gamemode::update(1.0f);
+//    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+//}
+
+void Tank::RegisterControls()
 {
     auto listener = EventListenerKeyboard::create();
 
@@ -119,9 +158,15 @@ void Tank::Controls()
         };
     //Gamemode::update(1.0f);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-}
 
-void Tank::RegisterControls()
-{
 
+    auto listener2 = EventListenerMouse::create();
+
+    // 鼠标左键射击
+    listener2->onMouseDown = [=](EventMouse* event)
+        {
+            fire();
+        };
+
+    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, this);
 }

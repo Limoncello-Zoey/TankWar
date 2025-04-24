@@ -8,13 +8,13 @@ public:
     CREATE_FUNC(Tank);
     bool init() override;
     void fire();
-    void Controls();
+    //void Controls();
+    void RegisterControls();
 private:
-    void Shoot();
+    //void Shoot();
     float targetRotation;
     float fireCooldown = 0.0f;
     cocos2d::Vec2 velocity;
     void update(float delta) override;
     void updateRotation(float delta);
-    void RegisterControls();
 };
