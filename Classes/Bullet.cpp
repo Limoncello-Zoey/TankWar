@@ -7,6 +7,7 @@ USING_NS_CC;
 
 bool Bullet::init() {
     if (!Sprite::init()) return false;
+	this->setCameraMask((unsigned short)CameraFlag::USER1, true);
     this->scheduleUpdate();
     return true;
 }

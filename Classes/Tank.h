@@ -16,5 +16,5 @@ private:
     cocos2d::Vec2 velocity;
     void update(float delta) override;
     void updateRotation(float delta);
-    
+    void RegisterControls();
 };

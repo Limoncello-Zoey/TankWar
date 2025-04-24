@@ -47,7 +47,7 @@ bool HelloWorld::init()
     {
         float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
         float y = origin.y + closeItem->getContentSize().height/2;
-        closeItem->setPosition(Vec2(405,55));
+        closeItem->setPosition(Vec2(visibleSize.width / 2,55));
     }
     auto menu = Menu::create(closeItem, NULL);
     menu->setPosition(Vec2::ZERO);
@@ -57,7 +57,7 @@ bool HelloWorld::init()
     this->addChild(background, 0); 
 
     CCMenuItemLabel* gamestartItem = CCMenuItemLabel::create(CCLabelTTF::create("GameStart","Arial",60),this,menu_selector(HelloWorld::menuStartCallback));
-    gamestartItem->setPosition(Vec2(405, 135));
+    gamestartItem->setPosition(Vec2(visibleSize.width / 2, 135));
     CCMenu* startmenu = CCMenu::createWithItem(gamestartItem);
     startmenu->setPosition(Vec2::ZERO);
     this->addChild(startmenu,2);

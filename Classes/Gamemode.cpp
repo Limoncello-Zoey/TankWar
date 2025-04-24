@@ -20,27 +20,29 @@ Scene* Gamemode::createScene()
 // on "init" you need to initialize your instance
 bool Gamemode::init()
 {
-
     if (!Scene::init()) return false;
     MapSetUp();
 
     initTank();
-    Tank1->Controls();
+    Tank1->Controls();//注册监听器
 
+
+    Camera::getDefaultCamera()->setVisible(false);//禁用默认相机
     auto visiblesize = Director::getInstance()->getVisibleSize();
-    _camera=Camera::createOrthographic(visiblesize.width, visiblesize.height, 0, 1000);
-    this->addChild(_camera);
+    _camera=Camera::createOrthographic(visiblesize.width, visiblesize.height, 0, 1000);//自定义相机
 	_camera->setCameraFlag(CameraFlag::USER1);
+    this->addChild(_camera);
+    _camera->setPosition3D(Vec3(-130, 35, 0));// 修改初始坐标
+    _camera->setScale(0.6f);
+    
+    this->setCameraMask((unsigned short)CameraFlag::USER1,true);
 
 
-    Vec3 newCameraPos(100, 100, 0); // 可根据需求修改坐标
-    _camera->setPosition3D(newCameraPos);
 
-    scheduleUpdate();
-    Shoot();
+    Shoot();//注册鼠标监听器
+    
+
     return true;
-
-
 }
 
 void Gamemode::MapSetUp() 

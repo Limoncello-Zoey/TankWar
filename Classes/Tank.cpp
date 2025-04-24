@@ -14,6 +14,8 @@ bool Tank::init()
     if (!Sprite::initWithFile("Tankbody.png")) return false;
     setAnchorPoint(Vec2(0.5f, 0.5f));
     this->scheduleUpdate();
+
+    RegisterControls();
     return true;
 }
 
@@ -25,11 +27,7 @@ void Tank::fire()
     Vec2 spawnPos = this->getPosition() +
         Vec2(cos(radians), sin(radians)) * offset;
     scene->spawnBullet(spawnPos,radians);
-    /*auto bullet = Bullet::create();
-    Vec2 direction = Vec2(cos(radians), sin(radians));
-    bullet->setup(spawnPos, direction, 800.0f);
-    //activeBullets.pushBack(bullet);
-    addChild(bullet);*/
+
 }
 void Tank::update(float delta) 
 {
@@ -121,4 +119,9 @@ void Tank::Controls()
         };
     //Gamemode::update(1.0f);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
+}
+
+void Tank::RegisterControls()
+{
+
 }
