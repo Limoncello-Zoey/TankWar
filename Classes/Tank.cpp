@@ -126,7 +126,8 @@ void Tank::RegisterControls()
     auto listener = EventListenerKeyboard::create();
 
     // 按键按下
-    listener->onKeyPressed = [=](EventKeyboard::KeyCode key, Event* e) {
+    listener->onKeyPressed = [=](EventKeyboard::KeyCode key, Event* e) 
+    {
         switch (key) {
         case EventKeyboard::KeyCode::KEY_W:
             velocity.y = 100.0f; // 上移速度
@@ -141,10 +142,11 @@ void Tank::RegisterControls()
             velocity.x = 100.0f;
             break;
         }
-        };
+    };
 
     // 按键释放
-    listener->onKeyReleased = [=](EventKeyboard::KeyCode key, Event* e) {
+    listener->onKeyReleased = [=](EventKeyboard::KeyCode key, Event* e) 
+    {
         switch (key) {
         case EventKeyboard::KeyCode::KEY_W:
         case EventKeyboard::KeyCode::KEY_S:
@@ -155,7 +157,7 @@ void Tank::RegisterControls()
             velocity.x = 0.0f;
             break;
         }
-        };
+    };
     //Gamemode::update(1.0f);
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
 
@@ -164,9 +166,9 @@ void Tank::RegisterControls()
 
     // 鼠标左键射击
     listener2->onMouseDown = [=](EventMouse* event)
-        {
-            fire();
-        };
+    {
+        fire();
+    };
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, this);
 }
