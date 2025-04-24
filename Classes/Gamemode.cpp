@@ -1,3 +1,4 @@
+#include "Gameover.h"
 #include "Gamemode.h"
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
@@ -175,6 +176,8 @@ void Gamemode::checkBulletCollisions()
         // ¼ì²âÇ½±ÚÅö×²
         if (isCircleCollision(center1, radius1, center2, radius2)) 
         {
+            Scene* gameover = Gameover::createScene();
+            CCDirector::sharedDirector()->replaceScene(gameover);
             bullet->removeFromParent();
             activeBullets.erase(i--);
             continue;
