@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include <cstring>
 #include "network/WebSocket.h"
 
 class NetworkManager : public cocos2d::network::WebSocket::Delegate {
@@ -10,7 +11,6 @@ public:
     void connectToHost(const std::string& ip); // 作为客户端连接
     void sendTankState(float x, float y, float rotation); // 发送坦克状态
 
-private:
     cocos2d::network::WebSocket* _socket = nullptr;
     bool _isHost = false;
 

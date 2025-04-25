@@ -1,5 +1,16 @@
 #include "NetworkManager.h"
 
+//监听与发送
+
+//两种类型的包：
+//1.每隔10ms同步己方坦克的坐标和方向角
+//2.按照事件响应子弹发射
+//以及可能存在的状态包
+
+//双方监听端口统一为1145
+
+using namespace std;
+using namespace cocos2d;
 
 NetworkManager* NetworkManager::getInstance() {
     static NetworkManager instance;
@@ -8,10 +19,10 @@ NetworkManager* NetworkManager::getInstance() {
 
 // 主机：监听8080端口
 void NetworkManager::startHost() {
-    if (_socket) return;
+    if (_socket) return; //如果_socket已经有了值，就返回
     _isHost = true;
     _socket = new cocos2d::network::WebSocket();
-    _socket->init(*this, "ws://0.0.0.0:8080", nullptr, "chat"); // 必须设置协议名（如"chat"）
+    _socket->init(*this, "ws://0.0.0.0:1145", nullptr, "chat"); // 必须设置协议名（如"chat"）
 }
 
 // 客户端：连接指定IP
@@ -19,7 +30,7 @@ void NetworkManager::connectToHost(const std::string& ip) {
     if (_socket) return;
     _isHost = false;
     _socket = new cocos2d::network::WebSocket();
-    std::string url = "ws://" + ip + ":8080";
+    std::string url = "ws://" + ip + ":1145";
     _socket->init(*this, url.c_str(), nullptr, "chat");
 }
 
@@ -32,7 +43,7 @@ void NetworkManager::sendTankState(float x, float y, float rotation) {
         float x;
         float y;
         float rotation;
-    };
+    };s
 #pragma pack(pop)
 
     TankPacket packet{ x, y, rotation };
