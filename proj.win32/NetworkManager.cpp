@@ -12,75 +12,72 @@
 using namespace std;
 using namespace cocos2d;
 
+
+USING_NS_CC;
+using namespace network;
+
 NetworkManager* NetworkManager::getInstance() {
     static NetworkManager instance;
     return &instance;
 }
 
-// 主机：监听8080端口
+// 主机监听
 void NetworkManager::startHost() {
-    if (_socket) return; //如果_socket已经有了值，就返回
+    if (_socket) return;
     _isHost = true;
-    _socket = new cocos2d::network::WebSocket();
-    _socket->init(*this, "ws://0.0.0.0:1145", nullptr, "chat"); // 必须设置协议名（如"chat"）
+    _socket = new WebSocket();
+    _socket->init(*this, "ws://0.0.0.0:8080", nullptr, "");
 }
 
-// 客户端：连接指定IP
+// 客户端连接
 void NetworkManager::connectToHost(const std::string& ip) {
     if (_socket) return;
     _isHost = false;
-    _socket = new cocos2d::network::WebSocket();
-    std::string url = "ws://" + ip + ":1145";
-    _socket->init(*this, url.c_str(), nullptr, "chat");
+    _socket = new WebSocket();
+    std::string url = "ws://" + ip + ":8080";
+    _socket->init(*this, url, nullptr, "");
 }
 
-// 发送坦克状态（二进制数据）
+// 发送坦克状态
 void NetworkManager::sendTankState(float x, float y, float rotation) {
-    if (!_socket || !_socket->isConnected()) return;
+    if (!_socket || _socket->getReadyState() != WebSocket::State::OPEN) return;
 
 #pragma pack(push,1)
     struct TankPacket {
-        float x;
-        float y;
-        float rotation;
-    };s
+        float x, y, rotation;
+    };
 #pragma pack(pop)
 
     TankPacket packet{ x, y, rotation };
-    _socket->send((const char*)&packet, sizeof(packet));
+    _socket->send((const unsigned char*)&packet, sizeof(packet));
 }
 
-//--- WebSocket回调 ---
+// 回调实现
 void NetworkManager::onOpen(WebSocket* ws) {
-    CCLOG("Connected! Waiting for peer...");
+    CCLOG("Connected!");
 }
 
-void NetworkManager::onMessage(WebSocket* ws, const Data& data) {
-    if (data.len != 12) return; // 检查是否为合法包（3个float=12字节）
+void NetworkManager::onMessage(WebSocket* ws, const WebSocket::Data& data) {
+    if (data.len != 12) return;
 
-    struct TankPacket {
-        float x;
-        float y;
-        float rotation;
-    };
+    struct TankPacket { float x, y, rotation; };
     auto packet = reinterpret_cast<const TankPacket*>(data.bytes);
 
-    // 主线程更新敌方坦克
-    cocos2d::Director::getInstance()->getScheduler()->performFunctionInCocosThread([=]() {
-        auto scene = cocos2d::Director::getInstance()->getRunningScene();
-        auto enemy = scene->getChildByName("enemy_tank");
-        if (enemy) {
+    Director::getInstance()->getScheduler()->performFunctionInCocosThread([=]() {
+        auto scene = Director::getInstance()->getRunningScene();
+        if (auto enemy = scene->getChildByName("enemy_tank")) {
             enemy->setPosition(packet->x, packet->y);
             enemy->setRotation(packet->rotation);
         }
         });
 }
 
-void NetworkManager::onError(WebSocket* ws, const ErrorCode& error) {
-    CCLOG("Network error: %d", (int)error);
-}
-
 void NetworkManager::onClose(WebSocket* ws) {
     CCLOG("Connection closed");
+    _socket = nullptr;
+}
+
+void NetworkManager::onError(WebSocket* ws, const WebSocket::ErrorCode& error) {
+    CCLOG("Error: %d", (int)error);
     _socket = nullptr;
 }
