@@ -21,8 +21,6 @@ const float Gamemode::GRID_SIZE = 45.0f;
 // on "init" you need to initialize your instance
 bool Gamemode::init()
 {
-
-
     if (!Scene::init()) return false;
     MapSetUp();
 

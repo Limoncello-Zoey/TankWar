@@ -36,6 +36,9 @@
     <ClCompile Include="NetworkManager.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="..\Classes\WaitingHall.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -60,6 +63,9 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="NetworkManager.h">
+      <Filter>src</Filter>
+    </ClInclude>
+    <ClInclude Include="..\Classes\WaitingHall.h">
       <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>

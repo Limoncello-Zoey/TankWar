@@ -26,7 +26,7 @@ void NetworkManager::startHost() {
     if (_socket) return;
     _isHost = true;
     _socket = new WebSocket();
-    _socket->init(*this, "ws://0.0.0.0:8080", nullptr, "");
+    _socket->init(*this, "ws://0.0.0.0:1145", nullptr, "");
 }
 
 // 客户端连接
@@ -34,7 +34,7 @@ void NetworkManager::connectToHost(const std::string& ip) {
     if (_socket) return;
     _isHost = false;
     _socket = new WebSocket();
-    std::string url = "ws://" + ip + ":8080";
+    std::string url = "ws://" + ip + ":1145";
     _socket->init(*this, url, nullptr, "");
 }
 

@@ -1,6 +1,5 @@
 #pragma once
-#ifndef __GAMEOVER_H__
-#define __GAMEOVER_H__
+
 
 #include "cocos2d.h"
 
@@ -17,5 +16,3 @@ public:
     // implement the "static create()" method manually
     CREATE_FUNC(Gameover);
 };
-
-#endif // __HELLOWORLD_SCENE_H__
