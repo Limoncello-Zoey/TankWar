@@ -17,6 +17,7 @@ public:
 	virtual bool init() override;
 	static Scene* createScene();
 	CREATE_FUNC(WaitingHall);
-	void onIamHostClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+	void onCreateRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+	void onJoinRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType type);
 
 };
