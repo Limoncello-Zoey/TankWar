@@ -1,4 +1,4 @@
-//跨平台适用方案
+//跨平台适用
 #ifdef _WIN32
 #include <winsock2.h>
 #else
