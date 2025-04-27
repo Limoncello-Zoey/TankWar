@@ -78,6 +78,8 @@ void HelloWorld::menuCloseCallback(Ref* pSender)
 
 void HelloWorld::menuStartCallback(Ref* pSender)
 {
-    Scene* gamemode = Gamemode::createScene();
-    CCDirector::sharedDirector()->replaceScene(gamemode);
+    //Scene* gamemode = Gamemode::createScene();
+    //CCDirector::sharedDirector()->replaceScene(gamemode);
+	auto waitinghall = WaitingHall::createScene();
+	Director::getInstance()->replaceScene(waitinghall);
 }
