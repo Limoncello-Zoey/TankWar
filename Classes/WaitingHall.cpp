@@ -54,6 +54,8 @@ void WaitingHall::onCreateRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEve
 	if (type != ui::Widget::TouchEventType::ENDED)
 		return;
 	// Handle create room button click
+	UdpManager::getInstance()->startHostBroadcast(12345);
+
 
 }
 
@@ -62,5 +64,17 @@ void WaitingHall::onJoinRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEvent
 	if (type != ui::Widget::TouchEventType::ENDED) 
 		return;
 	// Handle join room button click
-	
+	auto recall = [=](std::string ip, int port) 
+	{
+		this->onRoomFound(ip, port);
+	};
+	UdpManager::getInstance()->searchHosts(recall);
+	//UdpManager::getInstance()->searchHosts(CC_CALLBACK_2(WaitingHall::onRoomFound,UdpManager::getInstance()));
+}
+
+void WaitingHall::onRoomFound(std::string ip, int port)
+{
+	// Handle room found
+	log("Room found at %s:%d", ip.c_str(), port);
+	// 这里可以添加代码来处理找到的房间，例如显示在UI上
 }

@@ -43,70 +43,100 @@ void UdpManager::stop() {
     if (_udpThread.joinable()) _udpThread.join();
 }
 
-// ----------------- 主机广播线程 -----------------
 void UdpManager::hostRoutine(int wsPort) {
-    // Windows 初始化 Winsock
+    // ================= 网络初始化阶段 =================
 #ifdef _WIN32
-    WSADATA wsa;
-    WSAStartup(MAKEWORD(2, 2), &wsa);
+    // Windows 特有的 Winsock 初始化
+    WSADATA wsaData;
+    if (WSAStartup(MAKEWORD(2, 2), &wsaData) != 0) {
+        OutputDebugStringA("WSAStartup failed");
+        return;
+    }
 #endif
 
-    // 创建UDP Socket
+    // 创建 UDP socket（IPv4，数据报类型）
     SOCKET sock = socket(AF_INET, SOCK_DGRAM, IPPROTO_UDP);
-    if (sock == -1) return;
+    if (sock == INVALID_SOCKET) {
+#ifdef _WIN32
+        OutputDebugStringA("Create socket failed");
+        WSACleanup();
+#endif
+        return;
+    }
 
-    // 关键设置：允许广播（否则无法发送广播包）
-    int broadcast = 1;
-    setsockopt(sock, SOL_SOCKET, SO_BROADCAST,
-        (char*)&broadcast, sizeof(broadcast));
+    // 设置广播选项（关键步骤）
+    int broadcastEnable = 1;
+    if (setsockopt(sock, SOL_SOCKET, SO_BROADCAST,
+        (char*)&broadcastEnable, sizeof(broadcastEnable)) == -1) {
+#ifdef _WIN32
+        closesocket(sock);
+        WSACleanup();
+#else
+        close(sock);
+#endif
+        return;
+    }
 
-    // 绑定本地端口（监听12345端口）
-    struct sockaddr_in recvAddr;
-    recvAddr.sin_family = AF_INET;            // IPv4
-    recvAddr.sin_port = htons(12345);        // 端口号转网络字节序
-    recvAddr.sin_addr.s_addr = INADDR_ANY;   // 监听所有网卡
-    bind(sock, (struct sockaddr*)&recvAddr, sizeof(recvAddr));
+    // 绑定本地端口
+    sockaddr_in recvAddr;
+    memset(&recvAddr, 0, sizeof(recvAddr));
+    recvAddr.sin_family = AF_INET;
+    recvAddr.sin_port = htons(12345);      // 监听固定端口
+    recvAddr.sin_addr.s_addr = INADDR_ANY; // 监听所有网络接口
 
-    // 主循环：持续监听客户端请求
+    if (bind(sock, (sockaddr*)&recvAddr, sizeof(recvAddr)) == -1) {
+#ifdef _WIN32
+        closesocket(sock);
+        WSACleanup();
+#else
+        close(sock);
+#endif
+        return;
+    }
+
+    // ================= 主循环阶段 =================
     while (_running) {
-        // 接收客户端发现请求
-        DiscoveryPacket packet;
-        struct sockaddr_in clientAddr;
+        DiscoveryPacket packet;     // 接收缓冲区
+        sockaddr_in clientAddr;     // 客户端地址
         socklen_t addrLen = sizeof(clientAddr);
 
-        // 阻塞接收数据（直到有客户端发来请求）
-        ssize_t len = recvfrom(sock, (char*)&packet, sizeof(packet), 0,
-            (struct sockaddr*)&clientAddr, &addrLen);
+        // 阻塞接收客户端请求（线程可在此处等待）
+        ssize_t recvLen = recvfrom(sock, (char*)&packet, sizeof(packet), 0,
+            (sockaddr*)&clientAddr, &addrLen);
 
-        // 验证数据包有效性
-        if (len == sizeof(DiscoveryPacket) &&
+        // 校验数据包有效性
+        if (recvLen == sizeof(DiscoveryPacket) &&
             memcmp(packet.magic, "COCO", 4) == 0 &&
-            packet.type == 0) {
+            packet.type == 0) { // 类型0为发现请求
 
-            // 构造响应包
+            // 构建响应包
             DiscoveryPacket response;
-            response.type = 1;
+            response.type = 1;  // 类型1为响应
             response.ip = clientAddr.sin_addr.s_addr; // 客户端的IP
-            response.port = htons(wsPort); // WebSocket端口转网络字节序
+            response.port = htons(wsPort); // 转换为网络字节序
 
-            // 向广播地址发送响应（255.255.255.255）
-            struct sockaddr_in broadcastAddr;
+            // 设置广播目标地址
+            sockaddr_in broadcastAddr;
+            memset(&broadcastAddr, 0, sizeof(broadcastAddr));
             broadcastAddr.sin_family = AF_INET;
-            broadcastAddr.sin_port = htons(12345);
-            broadcastAddr.sin_addr.s_addr = INADDR_BROADCAST;
+            broadcastAddr.sin_port = htons(12345); // 目标端口
+            broadcastAddr.sin_addr.s_addr = INADDR_BROADCAST; // 广播地址
 
+            // 发送响应（忽略错误，允许部分失败）
             sendto(sock, (char*)&response, sizeof(response), 0,
-                (struct sockaddr*)&broadcastAddr, sizeof(broadcastAddr));
+                (sockaddr*)&broadcastAddr, sizeof(broadcastAddr));
         }
 
-        // 避免CPU占用过高
+        // 避免CPU满载（可根据需求调整间隔）
         std::this_thread::sleep_for(std::chrono::milliseconds(100));
     }
 
-    // 关闭Socket和清理资源
-    closesocket(sock);
+    // ================= 资源清理阶段 =================
 #ifdef _WIN32
+    closesocket(sock);
     WSACleanup();
+#else
+    close(sock);
 #endif
 }
 
