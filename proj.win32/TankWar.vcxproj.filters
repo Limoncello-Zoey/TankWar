@@ -80,4 +80,7 @@
       <Filter>resource</Filter>
     </ResourceCompile>
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="..\Todo List.txt" />
+  </ItemGroup>
 </Project>
