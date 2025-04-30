@@ -24,6 +24,14 @@ bool WaitingHall::init()
 	this->addChild(CreateButton);
 	this->addChild(JoinButton);
 
+	//add output bar
+	auto outputbar = TextField::create("Output", "fonts/Marker Felt.ttf", 24);
+	outputbar->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 + 200));
+	outputbar->setMaxLength(100);
+	outputbar->setMaxLengthEnabled(true);
+	outputbar->setTextColor(Color4B(255, 255, 255, 255));
+	
+
 
 
 	// Create labels for buttons
