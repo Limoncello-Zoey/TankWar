@@ -16,6 +16,7 @@ public:
     //tank
     cocos2d::Vector<Bullet*> activeBullets;
     static Tank* Tank1;
+    static Tank* Tank2;
     cocos2d::Vec2 velocity;
 
     //camera

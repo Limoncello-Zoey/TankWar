@@ -10,6 +10,7 @@ USING_NS_CC;
 const float ROTATION_SPEED = 360.0f;   
 const float ANGLE_THRESHOLD = 5.0f;
 Tank* Gamemode::Tank1=nullptr;
+Tank* Gamemode::Tank2 = nullptr;
 std::vector<std::vector<int>> Gamemode::walls;
 
 Scene* Gamemode::createScene()
@@ -27,7 +28,7 @@ bool Gamemode::init()
     initTank();
     //Tank1->Controls();
     Gamemode::Tank1->RegisterControls();//×¢²á¼àÌýÆ÷
-
+    Gamemode::Tank2->RegisterControls();
 
     Camera::getDefaultCamera()->setVisible(false);//½ûÓÃÄ¬ÈÏÏà»ú
     auto visiblesize = Director::getInstance()->getVisibleSize();
@@ -95,6 +96,9 @@ void Gamemode::initTank()
     Gamemode::Tank1 = Tank::create();
     Gamemode::Tank1->setPosition(80.0f + GRID_SIZE * 1.1f, 60.0f + GRID_SIZE * 1.1f);
     addChild(Gamemode::Tank1);
+    Gamemode::Tank2 = Tank::create();
+    Gamemode::Tank2->setPosition(120.0f + GRID_SIZE * 1.1f, 80.0f + GRID_SIZE * 1.1f);
+    addChild(Gamemode::Tank2);
 }
 
 
