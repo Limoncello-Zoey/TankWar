@@ -80,6 +80,6 @@ void HelloWorld::menuStartCallback(Ref* pSender)
 {
     //Scene* gamemode = Gamemode::createScene();
     //CCDirector::sharedDirector()->replaceScene(gamemode);
-	auto waitinghall = Gamemode::createScene();
+	auto waitinghall = WaitingHall::createScene();
 	Director::getInstance()->replaceScene(waitinghall);
 }

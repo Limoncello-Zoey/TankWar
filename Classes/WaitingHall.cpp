@@ -25,13 +25,16 @@ bool WaitingHall::init()
 	this->addChild(JoinButton);
 
 	//add output bar
-	auto outputbar = TextField::create("Output", "fonts/Marker Felt.ttf", 24);
-	outputbar->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 + 200));
-	outputbar->setMaxLength(100);
-	outputbar->setMaxLengthEnabled(true);
-	outputbar->setTextColor(Color4B(255, 255, 255, 255));
-	
-
+	auto outputbar = Label::createWithTTF(
+		"这是一段长文本，当内容超过指定宽度时会自动换行。",
+		"fonts/Marker Felt.ttf", 24,
+		Size(400, 0), // 宽度固定为400，高度自适应
+		TextHAlignment::LEFT
+	);
+	outputbar->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 ));
+	outputbar->setTextColor(Color4B::WHITE);
+	outputbar->setOpacity(255);
+	this->addChild(outputbar,-2);
 
 
 	// Create labels for buttons
