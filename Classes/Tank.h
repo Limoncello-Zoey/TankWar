@@ -4,6 +4,9 @@
 /// 
 /// </summary>
 class Gamemode;
+/// <summary>
+/// 
+/// </summary>
 
 class Tank : public cocos2d::Sprite {
 public:
