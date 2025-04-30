@@ -3,13 +3,13 @@
 #include "Gamemode.h"
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
-//
+
 USING_NS_CC;
 
 const float ROTATION_SPEED = 360.0f;
 const float ANGLE_THRESHOLD = 5.0f;
 float Tank::radius;
-//shitrgherg
+
 bool Tank::init() 
 {
     if (!Sprite::initWithFile("Tankbody.png")) return false;
