@@ -24,6 +24,8 @@ bool WaitingHall::init()
 	this->addChild(CreateButton);
 	this->addChild(JoinButton);
 
+
+
 	// Create labels for buttons
 	
 	//auto label1 = Label::createWithTTF("Create Room", "fonts/Marker Felt.ttf", 24);
