@@ -1,6 +1,8 @@
 #pragma once
 #include "cocos2d.h"
-
+/// <summary>
+/// 
+/// </summary>
 class Gamemode;
 
 class Tank : public cocos2d::Sprite {
