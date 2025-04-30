@@ -2,7 +2,6 @@
 #include "cocos2d.h"
 #include "network/WebSocket.h"
 #include "ui/CocosGUI.h"
-#include "UDPManager.h"
 using namespace std;
 using namespace cocos2d;
 using namespace network;
@@ -12,7 +11,7 @@ class WaitingHall : public Scene
 {
 public:
 //veriables
-
+	static void* outputbar;
 
 //functions
 	virtual bool init() override;
@@ -21,4 +20,5 @@ public:
 	void onCreateRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType type);
 	void onJoinRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType type);
 	void onRoomFound(std::string ip, int port);
+	void printLog(const std::string& message);
 };

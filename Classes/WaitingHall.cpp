@@ -54,7 +54,7 @@ void WaitingHall::onCreateRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEve
 	if (type != ui::Widget::TouchEventType::ENDED)
 		return;
 	// Handle create room button click
-	UdpManager::getInstance()->startHostBroadcast(12345);
+	//UdpManager::getInstance()->startHostBroadcast(12345);
 
 
 }
@@ -68,7 +68,7 @@ void WaitingHall::onJoinRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEvent
 	{
 		this->onRoomFound(ip, port);
 	};
-	UdpManager::getInstance()->searchHosts(recall);
+	//UdpManager::getInstance()->searchHosts(recall);
 	//UdpManager::getInstance()->searchHosts(CC_CALLBACK_2(WaitingHall::onRoomFound,UdpManager::getInstance()));
 }
 

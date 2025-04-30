@@ -10,6 +10,9 @@
     <Filter Include="src">
       <UniqueIdentifier>{bb6c862e-70e9-49d9-81b7-3829a6f50471}</UniqueIdentifier>
     </Filter>
+    <Filter Include="废案">
+      <UniqueIdentifier>{b3029598-270b-4c07-a8a9-42262fb45c54}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -33,14 +36,14 @@
     <ClCompile Include="..\Classes\Gameover.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkManager.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
     <ClCompile Include="..\Classes\WaitingHall.cpp">
       <Filter>src</Filter>
     </ClCompile>
+    <ClCompile Include="NetworkManager.cpp">
+      <Filter>废案</Filter>
+    </ClCompile>
     <ClCompile Include="..\Classes\UDPManager.cpp">
-      <Filter>src</Filter>
+      <Filter>废案</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -65,14 +68,14 @@
     <ClInclude Include="..\Classes\Gameover.h">
       <Filter>src</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkManager.h">
-      <Filter>src</Filter>
-    </ClInclude>
     <ClInclude Include="..\Classes\WaitingHall.h">
       <Filter>src</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkManager.h">
+      <Filter>废案</Filter>
+    </ClInclude>
     <ClInclude Include="..\Classes\UDPManager.h">
-      <Filter>src</Filter>
+      <Filter>废案</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
