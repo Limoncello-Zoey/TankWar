@@ -1,3 +1,4 @@
 E:\workwork\TankWar\proj.win32\Debug.win32\TankWar.exe
 E:\workwork\tank-war\proj.win32\Debug.win32\TankWar.exe
 D:\Visual Studio\Project\tank-war\proj.win32\Debug.win32\TankWar.exe
+D:\homework\tank-war\proj.win32\Debug.win32\TankWar.exe
