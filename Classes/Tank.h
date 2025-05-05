@@ -24,4 +24,15 @@ public:
 
     void update(float delta) override;
     void updateRotation(float delta);
+
+    // 处理坦克受到伤害的方法声明
+    void takeDamage();
+    // 更新血量条显示的方法声明
+    void updateHealthBar();
+
+private:
+    // 坦克当前血量
+    int currentHealth;
+    // 血量条精灵指针
+    cocos2d::Sprite* healthBar;
 };
