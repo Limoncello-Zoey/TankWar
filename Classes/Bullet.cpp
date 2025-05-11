@@ -39,10 +39,12 @@ void Bullet::update(float delta) {
         this->setPosition(newPos);
     }
     //¼ì²â×²Ì¹¿Ë
-    checkBulletCollisions();
+    checkBulletCollisions1();
+    checkBulletCollisions2();
 }
 
-void Bullet::checkBulletCollisions()//¼ì²âÓëÌ¹¿ËÅö×²
+
+void Bullet::checkBulletCollisions1()//¼ì²âÓëÌ¹¿ËÅö×²
 {
     
     Vec2 center1 = this->getPosition();
@@ -55,6 +57,21 @@ void Bullet::checkBulletCollisions()//¼ì²âÓëÌ¹¿ËÅö×²
         this->removeFromParent();
     }
     
+}
+
+void Bullet::checkBulletCollisions2()//¼ì²âÓëÌ¹¿ËÅö×²
+{
+
+    Vec2 center1 = this->getPosition();
+    Vec2 center2 = Gamemode::Tank2->getPosition();
+
+    if (Gamemode::isCircleCollision(center1, Bullet::radius, center2, Tank::radius))
+    {
+        Scene* gameover = Gameover::createScene();
+        Director::getInstance()->replaceScene(gameover);
+        this->removeFromParent();
+    }
+
 }
 
 void Bullet::handleWallCollision() {
