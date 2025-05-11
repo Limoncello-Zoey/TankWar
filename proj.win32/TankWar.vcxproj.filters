@@ -45,6 +45,9 @@
     <ClCompile Include="..\Classes\UDPManager.cpp">
       <Filter>废案</Filter>
     </ClCompile>
+    <ClCompile Include="Network.cpp">
+      <Filter>src</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -76,6 +79,9 @@
     </ClInclude>
     <ClInclude Include="..\Classes\UDPManager.h">
       <Filter>废案</Filter>
+    </ClInclude>
+    <ClInclude Include="Network.h">
+      <Filter>src</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>

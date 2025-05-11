@@ -161,6 +161,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Tank.cpp" />
     <ClCompile Include="..\Classes\UDPManager.cpp" />
     <ClCompile Include="..\Classes\WaitingHall.cpp" />
+    <ClCompile Include="Network.cpp" />
     <ClCompile Include="NetworkManager.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
@@ -173,6 +174,7 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Tank.h" />
     <ClInclude Include="..\Classes\UDPManager.h" />
     <ClInclude Include="..\Classes\WaitingHall.h" />
+    <ClInclude Include="Network.h" />
     <ClInclude Include="NetworkManager.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
