@@ -3,6 +3,7 @@
 #include "Gamemode.h"
 #include "network/WebSocket.h"
 #include "ui/CocosGUI.h"
+#include "Network.h"
 using namespace std;
 using namespace cocos2d;
 using namespace network;

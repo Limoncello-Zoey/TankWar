@@ -20,6 +20,9 @@
 #endif 
 #include <random>
 
+const uint16_t BROADCAST_PORT = 21567;
+const int BUFFER_SIZE = 64;
+
 // 消息类型枚举 
 enum class MessageType : uint8_t 
 {
@@ -63,3 +66,45 @@ struct AttackInfo
 	bool attacking;
 };
 #pragma pack(pop)
+
+class NetworkManager {
+public:
+	int m_port;
+
+	NetworkManager();
+
+	~NetworkManager();
+
+	// 房主端初始化 
+	bool HostInitialize();
+
+	// 客户端初始化 
+	bool ClientInitialize(std::string& serverIP);
+
+	// 消息发送模板 
+	template<typename T>
+	void SendGameMessage(MessageType type, const T& data, sockaddr_in* target);
+
+	// 消息接收循环 
+	void ReceiveLoop();
+
+private:
+	int CreateUDPSocket(uint16_t port);
+
+	void BroadcastResponder();
+
+	int GetPort(int sock);
+
+	void SendBroadcastProbe(int sock);
+
+	bool ReceiveServerInfo(int sock, std::string& serverIP);
+
+	void HandleMessage(const GameMessage& msg, const sockaddr_in& from);
+
+	int m_socket;
+
+	std::atomic<bool> m_run;
+	bool m_broadcastRun = true;
+	std::thread m_broadcastThread;
+	sockaddr_in m_peerAddr;
+};

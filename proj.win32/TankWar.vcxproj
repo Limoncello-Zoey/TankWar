@@ -158,11 +158,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClCompile Include="..\Classes\Gamemode.cpp" />
     <ClCompile Include="..\Classes\Gameover.cpp" />
     <ClCompile Include="..\Classes\HelloWorldScene.cpp" />
+    <ClCompile Include="..\Classes\Network.cpp" />
     <ClCompile Include="..\Classes\Tank.cpp" />
-    <ClCompile Include="..\Classes\UDPManager.cpp" />
     <ClCompile Include="..\Classes\WaitingHall.cpp" />
-    <ClCompile Include="Network.cpp" />
-    <ClCompile Include="NetworkManager.cpp" />
+    <ClCompile Include="..\Classes\WatingHall.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
@@ -171,11 +170,10 @@ xcopy "$(ProjectDir)..\Resources" "$(OutDir)" /D /E /I /F /Y
     <ClInclude Include="..\Classes\Gamemode.h" />
     <ClInclude Include="..\Classes\Gameover.h" />
     <ClInclude Include="..\Classes\HelloWorldScene.h" />
+    <ClInclude Include="..\Classes\Network.h" />
     <ClInclude Include="..\Classes\Tank.h" />
-    <ClInclude Include="..\Classes\UDPManager.h" />
     <ClInclude Include="..\Classes\WaitingHall.h" />
-    <ClInclude Include="Network.h" />
-    <ClInclude Include="NetworkManager.h" />
+    <ClInclude Include="..\Classes\WatingHall.h" />
     <ClInclude Include="main.h" />
   </ItemGroup>
   <ItemGroup>
