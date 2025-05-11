@@ -40,11 +40,25 @@ NetworkManager::~NetworkManager()
 #ifdef _WIN32 
 	WSACleanup();
 #endif 
+	if (m_runThread.joinable()) {
+		m_run = false;
+		m_runThread.join();
+	}
+	if (m_broadcastThread.joinable()) {
+		m_broadcastRun = false;
+		m_broadcastThread.join();
+	}
 }
 
 // 房主端初始化 
 bool NetworkManager::HostInitialize()
 {
+	m_run = false;
+	if (m_broadcastThread.joinable())
+	{
+		m_broadcastRun = false;
+		m_broadcastThread.join();
+	}
 	// 创建游戏通信socket 
 	m_socket = CreateUDPSocket(0);
 	if (m_socket == -1) return false;
@@ -52,8 +66,15 @@ bool NetworkManager::HostInitialize()
 	std::cout << "绑定端口：" << m_port << std::endl;
 	// 启动广播响应线程 
 	m_run = true;
+	m_broadcastRun = true;
 	m_broadcastThread = std::thread(&NetworkManager::BroadcastResponder, this);
 	return true;
+}
+
+NetworkManager* NetworkManager::getInstance()
+{
+	static NetworkManager instance;
+	return &instance;
 }
 
 // 客户端初始化 
@@ -79,7 +100,7 @@ bool NetworkManager::ClientInitialize(std::string& serverIP)
 
 // 消息发送模板 //???
 template<typename T>
-void NetworkManager::SendGameMessage(MessageType type, const T& data, sockaddr_in* target = nullptr)
+void NetworkManager::SendGameMessage(MessageType type, const T& data, sockaddr_in* target)
 {
 	GameMessage msg;
 	msg.serialNumber = 0;
@@ -122,7 +143,7 @@ int NetworkManager::CreateUDPSocket(uint16_t port)
 	addr.sin_port = htons(port);
 	addr.sin_addr.s_addr = INADDR_ANY;
 
-	if (bind(sock, (sockaddr*)&addr, sizeof(addr)) == -1)
+	if (::bind(sock, (sockaddr*)&addr, sizeof(addr)) == -1)
 	{
 		std::cerr << "Bind failed" << std::endl;
 		return -1;
@@ -212,6 +233,12 @@ bool NetworkManager::ReceiveServerInfo(int sock, std::string& serverIP)
 	return false;
 }
 
+void RunOnMainThread(std::function<void()> func)
+{
+	auto scheduler = cocos2d::Director::getInstance()->getScheduler();
+	scheduler->performFunctionInCocosThread(func);
+}
+
 void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& from)
 {
 
@@ -223,9 +250,22 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 
 		std::cout << "玩家加入：" << inet_ntoa(from.sin_addr) << ":" << info->gamePort << std::endl;
 		// 记录客户端
-		m_broadcastRun = false;
+		
+			m_broadcastRun = false;
+			//m_broadcastThread.join();
+		
 		m_peerAddr = from;
 		m_peerAddr.sin_port = htons(info->gamePort);
+
+		
+		// 将任务添加到主循环中执行
+		RunOnMainThread([]() {
+			// 这里的代码会在UI线程中执行
+			auto gameScene = Gamemode::create();
+			Director::getInstance()->replaceScene(gameScene);
+			});
+
+		
 		break;
 	}
 	case MessageType::PlayerMove:
@@ -246,5 +286,36 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 	}
 }
 
+void NetworkManager::HostMain()
+{
+	if (!HostInitialize()) return;
 
+	if (m_runThread.joinable()) {
+		m_run = false;
+		m_runThread.join();
+	}
+	m_runThread = std::thread(&NetworkManager::ReceiveLoop, this);
+}
+
+void NetworkManager::ClientMain()
+{
+	std::string serverIP;
+
+	while (!ClientInitialize(serverIP))
+	{
+		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
+	}
+	if (m_runThread.joinable()) {
+		m_run = false;
+		m_runThread.join();
+	}
+	m_runThread = std::thread(&NetworkManager::ReceiveLoop, this);
+
+	// 发送加入请求 
+	ServerInfo info{ m_port };
+	SendGameMessage(MessageType::ClientJoin, info);
+
+	auto gameScene = Gamemode::create();
+	Director::getInstance()->replaceScene(gameScene);
+}
 

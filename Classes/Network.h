@@ -19,6 +19,8 @@
 #include <unistd.h>
 #endif 
 #include <random>
+#include "WaitingHall.h"
+#include "AppDelegate.h"
 
 const uint16_t BROADCAST_PORT = 21567;
 const int BUFFER_SIZE = 64;
@@ -83,10 +85,16 @@ public:
 
 	// 消息发送模板 
 	template<typename T>
-	void SendGameMessage(MessageType type, const T& data, sockaddr_in* target);
+	void SendGameMessage(MessageType type, const T& data, sockaddr_in* target = nullptr);
 
 	// 消息接收循环 
 	void ReceiveLoop();
+
+	static NetworkManager* getInstance();
+
+	void HostMain();
+
+	void ClientMain();
 
 private:
 	int CreateUDPSocket(uint16_t port);
@@ -105,6 +113,9 @@ private:
 
 	std::atomic<bool> m_run;
 	bool m_broadcastRun = true;
+	std::thread m_runThread;
 	std::thread m_broadcastThread;
 	sockaddr_in m_peerAddr;
 };
+
+void RunOnMainThread(std::function<void()> func);
