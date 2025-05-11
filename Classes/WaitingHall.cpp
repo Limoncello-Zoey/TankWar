@@ -14,15 +14,19 @@ bool WaitingHall::init()
 	// add buttons
 	auto CreateButton = Button::create("CreateRoomNormal.png", "CreateRoomSelected.png");
 	auto JoinButton = Button::create("JoinRoomNormal.png", "JoinRoomSelected.png");
+	auto DemoButton = Button::create("DemoNormal.png", "DemoSelected.png");
 
 	CreateButton->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 + 100-300));
 	JoinButton->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 - 100-300));
+	DemoButton->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 + 300 - 300));
 
 	CreateButton->addTouchEventListener(CC_CALLBACK_2(WaitingHall::onCreateRoomClicked, this));
 	JoinButton->addTouchEventListener(CC_CALLBACK_2(WaitingHall::onJoinRoomClicked, this));
+	DemoButton->addTouchEventListener(CC_CALLBACK_2(WaitingHall::onDemoClicked, this));
 
 	this->addChild(CreateButton);
 	this->addChild(JoinButton);
+	this->addChild(DemoButton);
 
 	//add output bar
 	auto outputbar = Label::createWithTTF(
@@ -83,6 +87,12 @@ void WaitingHall::onJoinRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEvent
 	};
 	//UdpManager::getInstance()->searchHosts(recall);
 	//UdpManager::getInstance()->searchHosts(CC_CALLBACK_2(WaitingHall::onRoomFound,UdpManager::getInstance()));
+}
+
+void WaitingHall::onDemoClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType type)
+{
+	auto s = Gamemode::create();
+	Director::getInstance()->replaceScene(s);
 }
 
 void WaitingHall::onRoomFound(std::string ip, int port)

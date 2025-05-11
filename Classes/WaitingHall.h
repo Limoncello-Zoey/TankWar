@@ -1,5 +1,6 @@
 #pragma once
 #include "cocos2d.h"
+#include "Gamemode.h"
 #include "network/WebSocket.h"
 #include "ui/CocosGUI.h"
 using namespace std;
@@ -19,6 +20,7 @@ public:
 	CREATE_FUNC(WaitingHall);
 	void onCreateRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType type);
 	void onJoinRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType type);
+	void onDemoClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType type);
 	void onRoomFound(std::string ip, int port);
 	void printLog(const std::string& message);
 };
