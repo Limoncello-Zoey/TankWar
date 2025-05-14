@@ -11,6 +11,9 @@ const float ROTATION_SPEED = 360.0f;
 const float ANGLE_THRESHOLD = 5.0f;
 Tank* Gamemode::Tank1=nullptr;
 Tank* Gamemode::Tank2 = nullptr;
+Tank** Gamemode::Self = nullptr;
+Tank** Gamemode::Other = nullptr;
+
 std::vector<std::vector<int>> Gamemode::walls;
 
 Scene* Gamemode::createScene()
@@ -24,12 +27,11 @@ bool Gamemode::init()
 {
     if (!Scene::init()) return false;
     MapSetUp();
-
+    
     initTank();
-    //Tank1->Controls();
-    Gamemode::Tank1->RegisterControls();//注册监听器
-    Gamemode::Tank2->RegisterControls();
-
+    
+    //只有tank1是直接由键盘控制的，tank2由数据包控制
+    
     Camera::getDefaultCamera()->setVisible(false);//禁用默认相机
     auto visiblesize = Director::getInstance()->getVisibleSize();
     _camera=Camera::createOrthographic(visiblesize.width, visiblesize.height, 0, 1000);//自定义相机
@@ -99,6 +101,7 @@ void Gamemode::initTank()
     Gamemode::Tank2 = Tank::create();
     Gamemode::Tank2->setPosition(120.0f + GRID_SIZE * 1.1f, 80.0f + GRID_SIZE * 1.1f);
     addChild(Gamemode::Tank2);
+    (*Self)->RegisterControls();
 }
 
 
@@ -173,26 +176,6 @@ bool Gamemode::checkCollision(const Vec2& pos)
     return false;
 }
 
-//void Gamemode::checkBulletCollisions()
-//{
-//    for (ssize_t i = 0; i < activeBullets.size(); ++i) 
-//    {
-//        auto bullet = activeBullets.at(i);
-//        Vec2 center1 = bullet->getPosition();
-//        Vec2 center2 = Tank1->getPosition();
-//        float radius1 = bullet->getContentSize().width / 2;
-//        float radius2 = Tank1->getContentSize().width / 2;
-//        // 检测墙壁碰撞
-//        if (isCircleCollision(center1, radius1, center2, radius2)) 
-//        {
-//            Scene* gameover = Gameover::createScene();
-//            CCDirector::sharedDirector()->replaceScene(gameover);
-//            bullet->removeFromParent();
-//            activeBullets.erase(i--);
-//            continue;
-//        }
-//    }
-//}
 
 bool Gamemode::CheckPosition(const Vec2& pos)
 {

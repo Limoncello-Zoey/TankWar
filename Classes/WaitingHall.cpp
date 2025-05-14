@@ -1,6 +1,9 @@
 #include "WaitingHall.h"
+
+#include "Gamemode.h"
 using namespace std;
 using namespace cocos2d;
+using namespace ui;
 using namespace network;
 
 bool WaitingHall::init()

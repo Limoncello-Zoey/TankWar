@@ -5,10 +5,8 @@
 #include <mutex>
 #include <condition_variable>
 #include <queue>
-#include <iostream>
 #include <cstring>
 #include <vector>
-#include <thread>
 #include <atomic>
 	#ifdef _WIN32 
 	#define _WINSOCK_DEPRECATED_NO_WARNINGS 
@@ -84,9 +82,24 @@ public:
 	// 客户端初始化 
 	bool ClientInitialize();
 
-	// 消息发送模板 
+	//// 消息发送模板 
+	//template<typename T>
+	//void SendGameMessage(MessageType type, const T& data, sockaddr_in* target);
+
 	template<typename T>
-	void SendGameMessage(MessageType type, const T& data, sockaddr_in* target = nullptr);
+	void SendGameMessage(MessageType type, const T& data, sockaddr_in* target = nullptr)
+	{
+		GameMessage msg;
+		msg.serialNumber = ++send_serialNumber;
+		msg.type = type;
+		memcpy(msg.payload, &data, sizeof(T));
+		msg.UpdateChecksum();
+
+		sockaddr_in dest = m_peerAddr;
+		if (target) dest = *target;
+
+		sendto(m_socket, (char*)&msg, sizeof(msg), 0, (sockaddr*)&dest, sizeof(dest));
+	}
 
 	// 消息接收循环 
 	void ReceiveLoop();

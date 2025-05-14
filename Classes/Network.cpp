@@ -1,6 +1,7 @@
 // 网络配置 
 #include "Network.h"
-
+#include "Gamemode.h"
+#include "Tank.h"
 
 //////////////////////////////////////////////////////////////////////////////////
 bool GameMessage::Validate() const 
@@ -111,22 +112,22 @@ bool NetworkManager::ClientInitialize()
 	return true;
 }
 
-// 消息发送模板 //???
-template<typename T>
-void NetworkManager::SendGameMessage(MessageType type, const T& data, sockaddr_in* target)
-{
-	GameMessage msg;
-	msg.serialNumber = ++ send_serialNumber;
-	msg.type = type;
-	memcpy(msg.payload, &data, sizeof(T));
-	msg.UpdateChecksum();
-
-	sockaddr_in dest = m_peerAddr;
-	if (target) dest = *target;
-
-	sendto(m_socket, (char*)&msg, sizeof(msg), 0, (sockaddr*)&dest, sizeof(dest));
-
-}
+// 消息发送模板 
+//template<typename T>
+//void NetworkManager::SendGameMessage(MessageType type, const T& data, sockaddr_in* target)
+//{
+//	GameMessage msg;
+//	msg.serialNumber = ++ send_serialNumber;
+//	msg.type = type;
+//	memcpy(msg.payload, &data, sizeof(T));
+//	msg.UpdateChecksum();
+//
+//	sockaddr_in dest = m_peerAddr;
+//	if (target) dest = *target;
+//
+//	sendto(m_socket, (char*)&msg, sizeof(msg), 0, (sockaddr*)&dest, sizeof(dest));
+//
+//}
 
 // 消息接收循环 
 // run线程
@@ -281,10 +282,12 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 			// 将任务添加到主循环中执行
 			RunOnMainThread([=]() {
 				// 这里的代码会在UI线程中执行
+				Gamemode::Self = &Gamemode::Tank1;
+				Gamemode::Other = &Gamemode::Tank2;
 				auto gameScene = Gamemode::create();
-				Director::getInstance()->replaceScene(gameScene);
+				cocos2d::Director::getInstance()->replaceScene(gameScene);
 				});
-
+			
 			break;
 		}
 		case MessageType::PlayerMove:
@@ -296,9 +299,10 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 		}
 		case MessageType::PlayerAttack:
 		{
-			AttackInfo* attack = (AttackInfo*)msg.payload;
-			std::cout << "Attack direction: "
-				<< 1 << std::endl;
+			RunOnMainThread([=]() 
+			{
+				(*Gamemode::Other)->fire();
+			});
 			break;
 		}
 	// 其他消息处理...
@@ -331,9 +335,13 @@ void NetworkManager::ClientMain()
 	// 发送加入请求 
 	ServerInfo info{ m_port };
 	SendGameMessage(MessageType::ClientJoin, info);
-
+	Gamemode::Self = &Gamemode::Tank2;
+	Gamemode::Other = &Gamemode::Tank1;
+	
 	auto gameScene = Gamemode::create();
-	Director::getInstance()->replaceScene(gameScene);
+
+	
+	cocos2d::Director::getInstance()->replaceScene(gameScene);
 }
 
 //////////////////////////////////////////////////////////////////////////////////

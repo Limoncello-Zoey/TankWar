@@ -1,9 +1,9 @@
-#ifndef __GAMEMODE_H__
-#define __GAMEMODE_H__
+#pragma once
 
 #include "cocos2d.h"
 #include "Bullet.h"
 #include "Tank.h"
+
 
 class Gamemode : public cocos2d::Scene
 {
@@ -17,8 +17,10 @@ public:
     cocos2d::Vector<Bullet*> activeBullets;
     static Tank* Tank1;
     static Tank* Tank2;
+    static Tank** Self;
+    static Tank** Other;
     cocos2d::Vec2 velocity;
-
+    
     //camera
     cocos2d::Camera* _camera;
 
@@ -55,5 +57,3 @@ public:
     /*void Shoot();*/
     
 };
-
-#endif
