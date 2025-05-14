@@ -82,7 +82,7 @@ public:
 	bool HostInitialize();
 
 	// 客户端初始化 
-	bool ClientInitialize(std::string& serverIP);
+	bool ClientInitialize();
 
 	// 消息发送模板 
 	template<typename T>
@@ -109,7 +109,7 @@ private:
 
 	void SendBroadcastProbe(int sock);
 
-	bool ReceiveServerInfo(int sock, std::string& serverIP);
+	bool ReceiveServerInfo(int sock);
 
 	void HandleMessage(const GameMessage& msg, const sockaddr_in& from);
 

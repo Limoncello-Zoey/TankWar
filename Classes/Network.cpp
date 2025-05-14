@@ -87,29 +87,21 @@ NetworkManager* NetworkManager::getInstance()
 }
 
 // 客户端初始化 
-bool NetworkManager::ClientInitialize(std::string& serverIP)
+bool NetworkManager::ClientInitialize()
 {
-	// 发送广播探测 
-	int probeSocket = CreateUDPSocket(0);
-	SendBroadcastProbe(probeSocket);
-
-	// 接收服务器响应 
-	if (!ReceiveServerInfo(probeSocket, serverIP))
-	{
-		std::cerr << "No server found" << std::endl;
-		return false;
-	}
-
 	// 创建游戏通信socket 
-// 这里是接受的端口~
-	if (m_socket != 0)
-	{
-		closesocket(m_socket);
-	}
+	closesocket(m_socket);
 	m_socket = CreateUDPSocket(0);
 	if (m_socket == -1) return false;
 	m_port = GetPort(m_socket);
-	std::cout << "绑定端口：" << m_port << std::endl;
+
+	// 发送广播探测 
+	do 
+	{
+		SendBroadcastProbe(m_socket);
+
+	} while (!ReceiveServerInfo(m_socket));
+
 	return true;
 }
 
@@ -221,7 +213,7 @@ void NetworkManager::SendBroadcastProbe(int sock)
 	int res = sendto(sock, (char*)&message, 1, 0, (sockaddr*)&bcAddr, sizeof(bcAddr));
 }
 
-bool NetworkManager::ReceiveServerInfo(int sock, std::string& serverIP)
+bool NetworkManager::ReceiveServerInfo(int sock)
 {
 	sockaddr_in from;
 	int fromLen = sizeof(from);
@@ -242,9 +234,9 @@ bool NetworkManager::ReceiveServerInfo(int sock, std::string& serverIP)
 			ServerInfo* info = (ServerInfo*)msg.payload;
 			m_peerAddr = from;
 			m_peerAddr.sin_port = htons(info->gamePort);
-			serverIP = inet_ntoa(m_peerAddr.sin_addr);
+			//获取服务器IP的方法
+			/*serverIP = inet_ntoa(m_peerAddr.sin_addr);*/
 			m_run = true;
-			std::cout << "找到房间：" << serverIP << ":" << info->gamePort << std::endl;
 			return true;
 		}
 	}
@@ -311,16 +303,14 @@ void NetworkManager::HostMain()
 
 void NetworkManager::ClientMain()
 {
-	std::string serverIP;
-
-	while (!ClientInitialize(serverIP))
+	if (m_runThread.joinable()) 
 	{
-		std::this_thread::sleep_for(std::chrono::milliseconds(1000));
-	}
-	if (m_runThread.joinable()) {
 		m_run = false;
 		m_runThread.join();
 	}
+
+	ClientInitialize();
+
 	m_runThread = std::thread(&NetworkManager::ReceiveLoop, this);
 
 	// 发送加入请求 
