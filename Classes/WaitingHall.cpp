@@ -90,9 +90,3 @@ void WaitingHall::onDemoClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType
 	Director::getInstance()->replaceScene(s);
 }
 
-//void WaitingHall::onRoomFound()
-//{
-//	// Handle room found
-//	log("Room found at %s:%d", ip.c_str(), port);
-//	// 这里可以添加代码来处理找到的房间，例如显示在UI上
-//}

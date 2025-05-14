@@ -129,6 +129,7 @@ void NetworkManager::SendGameMessage(MessageType type, const T& data, sockaddr_i
 }
 
 // 消息接收循环 
+// run线程
 void NetworkManager::ReceiveLoop()
 {
 	while (m_run)
@@ -137,6 +138,8 @@ void NetworkManager::ReceiveLoop()
 		int fromLen = sizeof(from);
 
 		GameMessage msg;
+
+		//阻塞
 		int bytes = recvfrom(m_socket, (char*)&msg, sizeof(msg), 0,
 			(sockaddr*)&from, &fromLen);
 
@@ -248,6 +251,14 @@ bool NetworkManager::ReceiveServerInfo(int sock)
 	return false;
 }
 
+
+//	ServerBroadcast,   服务器广播响应 
+//	ClientJoin,        客户端加入请求 
+//	PlayerMove,        玩家移动 
+//	PlayerAttack,      玩家攻击 
+//	GameSync           游戏状态同步 
+
+//run线程中的,阻塞之后调用
 void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& from)
 {
 	if (msg.serialNumber < rec_serialNumber) return;
@@ -255,25 +266,24 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 
 	switch (msg.type)
 	{
+		//host收到了客户端的广播，并回复了自己的端口号（不指定但固定（也不能算））
+		//现在host又收到了client的join消息
 		case MessageType::ClientJoin:
 		{
 			//常见的妙手！
 			ServerInfo* info = (ServerInfo*)msg.payload;
-
+			//终止广播的接收
 			m_broadcastRespondRun = false;
-			//m_broadcastThread.join();
 
 			m_peerAddr = from;
 			m_peerAddr.sin_port = htons(info->gamePort);
 
-
 			// 将任务添加到主循环中执行
-			RunOnMainThread([]() {
+			RunOnMainThread([=]() {
 				// 这里的代码会在UI线程中执行
 				auto gameScene = Gamemode::create();
 				Director::getInstance()->replaceScene(gameScene);
 				});
-
 
 			break;
 		}

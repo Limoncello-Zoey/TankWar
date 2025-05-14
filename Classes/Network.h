@@ -123,6 +123,7 @@ private:
 	std::thread m_runThread;
 	std::thread m_broadcastRespondThread;
 
+	//对方的端口和ip
 	sockaddr_in m_peerAddr;
 };
 
