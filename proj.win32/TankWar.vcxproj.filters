@@ -42,9 +42,6 @@
     <ClCompile Include="..\Classes\Network.cpp">
       <Filter>src</Filter>
     </ClCompile>
-    <ClCompile Include="..\Classes\WatingHall.cpp">
-      <Filter>src</Filter>
-    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="main.h">
@@ -69,9 +66,6 @@
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\WaitingHall.h">
-      <Filter>src</Filter>
-    </ClInclude>
-    <ClInclude Include="..\Classes\WatingHall.h">
       <Filter>src</Filter>
     </ClInclude>
     <ClInclude Include="..\Classes\Network.h">

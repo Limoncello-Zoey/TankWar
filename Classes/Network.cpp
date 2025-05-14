@@ -53,22 +53,31 @@ NetworkManager::~NetworkManager()
 // 房主端初始化 
 bool NetworkManager::HostInitialize()
 {
+	// 关闭之前的线程
 	m_run = false;
 	if (m_broadcastThread.joinable())
 	{
 		m_broadcastRun = false;
 		m_broadcastThread.join();
 	}
-	// 创建游戏通信socket 
+
+
+	// 初始化，创建游戏通信socket ,用于接收定向的数据
+	if (m_socket != 0)
+	{
+		closesocket(m_socket);
+	}
 	m_socket = CreateUDPSocket(0);
 	if (m_socket == -1) return false;
 	m_port = GetPort(m_socket);
-	std::cout << "绑定端口：" << m_port << std::endl;
+
 	// 启动广播响应线程 
 	m_run = true;
 	m_broadcastRun = true;
 	m_broadcastThread = std::thread(&NetworkManager::BroadcastResponder, this);
 	return true;
+
+
 }
 
 NetworkManager* NetworkManager::getInstance()
@@ -92,7 +101,13 @@ bool NetworkManager::ClientInitialize(std::string& serverIP)
 	}
 
 	// 创建游戏通信socket 
+// 这里是接受的端口~
+	if (m_socket != 0)
+	{
+		closesocket(m_socket);
+	}
 	m_socket = CreateUDPSocket(0);
+	if (m_socket == -1) return false;
 	m_port = GetPort(m_socket);
 	std::cout << "绑定端口：" << m_port << std::endl;
 	return true;
@@ -111,8 +126,9 @@ void NetworkManager::SendGameMessage(MessageType type, const T& data, sockaddr_i
 	sockaddr_in dest = m_peerAddr;
 	if (target) dest = *target;
 
-	sendto(m_socket, (char*)&msg, sizeof(msg), 0,
-		(sockaddr*)&dest, sizeof(dest));
+	sendto(m_socket, (char*)&msg, sizeof(msg), 0, (sockaddr*)&dest, sizeof(dest));
+
+	//sendto(sock, (char*)&message, 1, 0, (sockaddr*)&bcAddr, sizeof(bcAddr))
 }
 
 // 消息接收循环 
@@ -153,6 +169,7 @@ int NetworkManager::CreateUDPSocket(uint16_t port)
 
 void NetworkManager::BroadcastResponder()
 {
+	//接受广播的socket
 	int bcSocket = CreateUDPSocket(BROADCAST_PORT);
 	if (bcSocket == -1) return;
 
@@ -168,13 +185,14 @@ void NetworkManager::BroadcastResponder()
 
 		char buffer[BUFFER_SIZE];
 		if (recvfrom(bcSocket, buffer, BUFFER_SIZE, 0,
-			(sockaddr*)&clientAddr, &addrLen) > 0)
+			(sockaddr*)&clientAddr, &addrLen) > 0)//阻塞
 		{
 			// 响应服务器信息 
 			ServerInfo info{ m_port };
 			SendGameMessage(MessageType::ServerBroadcast, info, &clientAddr);
 		}
 	}
+
 }
 
 int NetworkManager::GetPort(int sock)
@@ -231,12 +249,6 @@ bool NetworkManager::ReceiveServerInfo(int sock, std::string& serverIP)
 		}
 	}
 	return false;
-}
-
-void RunOnMainThread(std::function<void()> func)
-{
-	auto scheduler = cocos2d::Director::getInstance()->getScheduler();
-	scheduler->performFunctionInCocosThread(func);
 }
 
 void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& from)
@@ -319,3 +331,10 @@ void NetworkManager::ClientMain()
 	Director::getInstance()->replaceScene(gameScene);
 }
 
+//////////////////////////////////////////////////////////////////////////////////
+
+void RunOnMainThread(std::function<void()> func)
+{
+	auto scheduler = cocos2d::Director::getInstance()->getScheduler();
+	scheduler->performFunctionInCocosThread(func);
+}

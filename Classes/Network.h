@@ -10,14 +10,14 @@
 #include <vector>
 #include <thread>
 #include <atomic>
-#ifdef _WIN32 
-#define _WINSOCK_DEPRECATED_NO_WARNINGS 
-#include <winsock2.h>
-#else 
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <unistd.h>
-#endif 
+	#ifdef _WIN32 
+	#define _WINSOCK_DEPRECATED_NO_WARNINGS 
+	#include <winsock2.h>
+	#else 
+	#include <sys/socket.h>
+	#include <netinet/in.h>
+	#include <unistd.h>
+	#endif 
 #include <random>
 #include "WaitingHall.h"
 #include "AppDelegate.h"
@@ -36,8 +36,8 @@ enum class MessageType : uint8_t
 };
 
 #pragma pack(push, 1)
-// 基础消息结构 
-struct GameMessage 
+// 数据包结构
+struct GameMessage
 {
 	uint16_t checksum;          // 校验和
 	unsigned int serialNumber;  // 序列号
@@ -52,6 +52,7 @@ private:
 };
 
 // 具体消息结构 
+//服务器广播消息
 struct ServerInfo
 {
 	uint16_t gamePort;
@@ -77,7 +78,7 @@ public:
 
 	~NetworkManager();
 
-	// 房主端初始化 
+	// 房主端初始化 HostMain调用
 	bool HostInitialize();
 
 	// 客户端初始化 
@@ -90,10 +91,13 @@ public:
 	// 消息接收循环 
 	void ReceiveLoop();
 
+	//单例
 	static NetworkManager* getInstance();
 
+	//“创建房间”调用
 	void HostMain();
 
+	//“加入房间”调用
 	void ClientMain();
 
 private:
@@ -111,10 +115,12 @@ private:
 
 	int m_socket;
 
-	std::atomic<bool> m_run;
+	bool m_run;
 	bool m_broadcastRun = true;
+
 	std::thread m_runThread;
 	std::thread m_broadcastThread;
+
 	sockaddr_in m_peerAddr;
 };
 
