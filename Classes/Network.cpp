@@ -44,9 +44,9 @@ NetworkManager::~NetworkManager()
 		m_run = false;
 		m_runThread.join();
 	}
-	if (m_broadcastThread.joinable()) {
-		m_broadcastRun = false;
-		m_broadcastThread.join();
+	if (m_broadcastRespondThread.joinable()) {
+		m_broadcastRespondRun = false;
+		m_broadcastRespondThread.join();
 	}
 }
 
@@ -55,14 +55,16 @@ bool NetworkManager::HostInitialize()
 {
 	// 关闭之前的线程
 	m_run = false;
-	if (m_broadcastThread.joinable())
+	if (m_broadcastRespondThread.joinable())
 	{
-		m_broadcastRun = false;
-		m_broadcastThread.join();
+		m_broadcastRespondRun = false;
+		m_broadcastRespondThread.join();
 	}
 
+	rec_serialNumber = 0;
+	send_serialNumber = 0;
 
-	// 初始化，创建游戏通信socket ,用于接收定向的数据
+	// 初始化，创建游戏通信socket
 	if (m_socket != 0)
 	{
 		closesocket(m_socket);
@@ -73,8 +75,8 @@ bool NetworkManager::HostInitialize()
 
 	// 启动广播响应线程 
 	m_run = true;
-	m_broadcastRun = true;
-	m_broadcastThread = std::thread(&NetworkManager::BroadcastResponder, this);
+	m_broadcastRespondRun = true;
+	m_broadcastRespondThread = std::thread(&NetworkManager::BroadcastResponder, this);
 	return true;
 
 
@@ -89,6 +91,10 @@ NetworkManager* NetworkManager::getInstance()
 // 客户端初始化 
 bool NetworkManager::ClientInitialize()
 {
+
+	rec_serialNumber = 0;
+	send_serialNumber = 0;
+
 	// 创建游戏通信socket 
 	closesocket(m_socket);
 	m_socket = CreateUDPSocket(0);
@@ -110,7 +116,7 @@ template<typename T>
 void NetworkManager::SendGameMessage(MessageType type, const T& data, sockaddr_in* target)
 {
 	GameMessage msg;
-	msg.serialNumber = 0;
+	msg.serialNumber = ++ send_serialNumber;
 	msg.type = type;
 	memcpy(msg.payload, &data, sizeof(T));
 	msg.UpdateChecksum();
@@ -120,7 +126,6 @@ void NetworkManager::SendGameMessage(MessageType type, const T& data, sockaddr_i
 
 	sendto(m_socket, (char*)&msg, sizeof(msg), 0, (sockaddr*)&dest, sizeof(dest));
 
-	//sendto(sock, (char*)&message, 1, 0, (sockaddr*)&bcAddr, sizeof(bcAddr))
 }
 
 // 消息接收循环 
@@ -170,7 +175,7 @@ void NetworkManager::BroadcastResponder()
 	setsockopt(bcSocket, SOL_SOCKET, SO_BROADCAST,
 		(char*)&broadcastEnable, sizeof(broadcastEnable));
 
-	while (m_broadcastRun)
+	while (m_broadcastRespondRun)
 	{
 		sockaddr_in clientAddr;
 		int addrLen = sizeof(clientAddr);
@@ -245,47 +250,47 @@ bool NetworkManager::ReceiveServerInfo(int sock)
 
 void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& from)
 {
+	if (msg.serialNumber < rec_serialNumber) return;
+	rec_serialNumber = msg.serialNumber;
 
 	switch (msg.type)
 	{
-	case MessageType::ClientJoin:
-	{
-		ServerInfo* info = (ServerInfo*)msg.payload;
+		case MessageType::ClientJoin:
+		{
+			//常见的妙手！
+			ServerInfo* info = (ServerInfo*)msg.payload;
 
-		std::cout << "玩家加入：" << inet_ntoa(from.sin_addr) << ":" << info->gamePort << std::endl;
-		// 记录客户端
-		
-			m_broadcastRun = false;
+			m_broadcastRespondRun = false;
 			//m_broadcastThread.join();
-		
-		m_peerAddr = from;
-		m_peerAddr.sin_port = htons(info->gamePort);
 
-		
-		// 将任务添加到主循环中执行
-		RunOnMainThread([]() {
-			// 这里的代码会在UI线程中执行
-			auto gameScene = Gamemode::create();
-			Director::getInstance()->replaceScene(gameScene);
-			});
+			m_peerAddr = from;
+			m_peerAddr.sin_port = htons(info->gamePort);
 
-		
-		break;
-	}
-	case MessageType::PlayerMove:
-	{
-		PlayerInput* input = (PlayerInput*)msg.payload;
-		std::cout << "Received move: x=" << input->x
-			<< " y=" << input->y << std::endl;
-		break;
-	}
-	case MessageType::PlayerAttack:
-	{
-		AttackInfo* attack = (AttackInfo*)msg.payload;
-		std::cout << "Attack direction: "
-			<< 1 << std::endl;
-		break;
-	}
+
+			// 将任务添加到主循环中执行
+			RunOnMainThread([]() {
+				// 这里的代码会在UI线程中执行
+				auto gameScene = Gamemode::create();
+				Director::getInstance()->replaceScene(gameScene);
+				});
+
+
+			break;
+		}
+		case MessageType::PlayerMove:
+		{
+			PlayerInput* input = (PlayerInput*)msg.payload;
+			std::cout << "Received move: x=" << input->x
+				<< " y=" << input->y << std::endl;
+			break;
+		}
+		case MessageType::PlayerAttack:
+		{
+			AttackInfo* attack = (AttackInfo*)msg.payload;
+			std::cout << "Attack direction: "
+				<< 1 << std::endl;
+			break;
+		}
 	// 其他消息处理...
 	}
 }

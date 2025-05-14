@@ -114,12 +114,14 @@ private:
 	void HandleMessage(const GameMessage& msg, const sockaddr_in& from);
 
 	int m_socket;
+	unsigned int rec_serialNumber;
+	unsigned int send_serialNumber;
 
 	bool m_run;
-	bool m_broadcastRun = true;
+	bool m_broadcastRespondRun = true;
 
 	std::thread m_runThread;
-	std::thread m_broadcastThread;
+	std::thread m_broadcastRespondThread;
 
 	sockaddr_in m_peerAddr;
 };
