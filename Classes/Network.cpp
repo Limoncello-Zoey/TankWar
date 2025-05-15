@@ -1,6 +1,7 @@
 // 网络配置 
 #include "Network.h"
 #include "Gamemode.h"
+#include "Gameover.h"
 #include "Tank.h"
 
 //////////////////////////////////////////////////////////////////////////////////
@@ -276,10 +277,11 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 		}
 		case MessageType::Position:
 		{
+			/*if(!Gamemode::Other()->isRunning()) break;*/
 			TankPosition* input = (TankPosition*)msg.payload;
-			cocos2d::log("x: %f, y: %f, angle: %f", input->x, input->y, input->angle);
 			RunOnMainThread([=]() 
 			{
+				if (Gamemode::Other() == nullptr || !dynamic_cast<Gamemode*>(cocos2d::Director::getInstance()->getRunningScene())) return;
 				Gamemode::Other()->setPosition(input->x, input->y);
 				Gamemode::Other()->setRotation(input->angle);
 			});
@@ -293,7 +295,19 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 			});
 			break;
 		}
-	// 其他消息处理...
+		//收到消息意味着自己赢了
+		case MessageType::Die:
+		{
+			RunOnMainThread([=]()
+			{
+				auto gameover = dynamic_cast<Gameover*>(Gameover::createScene());
+				gameover->_win = true;
+				gameover->ChangeText("You Win!");
+				cocos2d::Director::getInstance()->replaceScene(gameover);
+				//this->removeFromParent();
+			});
+			break;
+		}
 	}
 }
 
@@ -326,7 +340,6 @@ void NetworkManager::ClientMain()
 	Gamemode::_self = 2;
 	
 	auto gameScene = Gamemode::create();
-
 	cocos2d::Director::getInstance()->replaceScene(gameScene);
 }
 

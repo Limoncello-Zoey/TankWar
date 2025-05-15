@@ -19,6 +19,7 @@
 #include <random>
 #include "WaitingHall.h"
 #include "AppDelegate.h"
+#include "cocos2d.h"
 
 const uint16_t BROADCAST_PORT = 21567;
 const int BUFFER_SIZE = 64;
@@ -26,11 +27,11 @@ const int BUFFER_SIZE = 64;
 // 消息类型枚举 
 enum class MessageType : uint8_t 
 {
-    ServerBroadcast,  // 服务器广播响应 
-    ClientJoin,       // 客户端加入请求 
-    Position,       // 玩家移动 
-    Attack,     // 玩家攻击 
-    GameSync          // 游戏状态同步 
+    ServerBroadcast,	// 服务器广播响应 
+    ClientJoin,			// 客户端加入请求 
+    Position,			// 玩家移动 
+    Attack,				// 玩家攻击 
+	Die,				// 玩家死亡
 };
 
 #pragma pack(push, 1)

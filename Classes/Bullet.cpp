@@ -57,9 +57,13 @@ void Bullet::checkBulletCollisions()//¼ì²âÓëÌ¹¿ËÅö×²
     
     if (Gamemode::isCircleCollision(center1, Bullet::radius, center2, Tank::radius))
     {
-        Scene* gameover = Gameover::createScene();
+        auto gameover = dynamic_cast<Gameover*>(Gameover::createScene());
+		gameover->_win = false;
+		gameover->ChangeText("You Lose!");
         Director::getInstance()->replaceScene(gameover);
         this->removeFromParent();
+
+		NetworkManager::getInstance()->SendGameMessage(MessageType::Die, true);
     }
  
 }
