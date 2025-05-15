@@ -112,23 +112,6 @@ bool NetworkManager::ClientInitialize()
 	return true;
 }
 
-// 消息发送模板 
-//template<typename T>
-//void NetworkManager::SendGameMessage(MessageType type, const T& data, sockaddr_in* target)
-//{
-//	GameMessage msg;
-//	msg.serialNumber = ++ send_serialNumber;
-//	msg.type = type;
-//	memcpy(msg.payload, &data, sizeof(T));
-//	msg.UpdateChecksum();
-//
-//	sockaddr_in dest = m_peerAddr;
-//	if (target) dest = *target;
-//
-//	sendto(m_socket, (char*)&msg, sizeof(msg), 0, (sockaddr*)&dest, sizeof(dest));
-//
-//}
-
 // 消息接收循环 
 // run线程
 void NetworkManager::ReceiveLoop()
@@ -193,7 +176,6 @@ void NetworkManager::BroadcastResponder()
 			SendGameMessage(MessageType::ServerBroadcast, info, &clientAddr);
 		}
 	}
-
 }
 
 int NetworkManager::GetPort(int sock)
@@ -273,35 +255,40 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 		{
 			//常见的妙手！
 			ServerInfo* info = (ServerInfo*)msg.payload;
+
 			//终止广播的接收
 			m_broadcastRespondRun = false;
 
+			//记录对方的ip与端口
 			m_peerAddr = from;
 			m_peerAddr.sin_port = htons(info->gamePort);
 
 			// 将任务添加到主循环中执行
-			RunOnMainThread([=]() {
+			RunOnMainThread([=]() 
+			{
 				// 这里的代码会在UI线程中执行
-				Gamemode::Self = &Gamemode::Tank1;
-				Gamemode::Other = &Gamemode::Tank2;
+				Gamemode::_self = 1;
 				auto gameScene = Gamemode::create();
 				cocos2d::Director::getInstance()->replaceScene(gameScene);
-				});
+			});
 			
 			break;
 		}
-		case MessageType::PlayerMove:
+		case MessageType::Position:
 		{
-			PlayerInput* input = (PlayerInput*)msg.payload;
-			std::cout << "Received move: x=" << input->x
-				<< " y=" << input->y << std::endl;
+			TankPosition* input = (TankPosition*)msg.payload;
+			RunOnMainThread([=]() 
+			{
+				Gamemode::Other()->setPosition(input->x, input->y);
+				Gamemode::Other()->setRotation(input->angle);
+			});
 			break;
 		}
-		case MessageType::PlayerAttack:
+		case MessageType::Attack:
 		{
 			RunOnMainThread([=]() 
 			{
-				(*Gamemode::Other)->fire();
+				Gamemode::Other()->fire();
 			});
 			break;
 		}
@@ -335,12 +322,10 @@ void NetworkManager::ClientMain()
 	// 发送加入请求 
 	ServerInfo info{ m_port };
 	SendGameMessage(MessageType::ClientJoin, info);
-	Gamemode::Self = &Gamemode::Tank2;
-	Gamemode::Other = &Gamemode::Tank1;
+	Gamemode::_self = 2;
 	
 	auto gameScene = Gamemode::create();
 
-	
 	cocos2d::Director::getInstance()->replaceScene(gameScene);
 }
 

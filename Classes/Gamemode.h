@@ -17,8 +17,7 @@ public:
     cocos2d::Vector<Bullet*> activeBullets;
     static Tank* Tank1;
     static Tank* Tank2;
-    static Tank** Self;
-    static Tank** Other;
+    static int _self;
     cocos2d::Vec2 velocity;
     
     //camera
@@ -42,6 +41,8 @@ public:
     void MapSetUp();
 
     //tanks & bullets
+    static Tank* Self();
+    static Tank* Other();
     void initTank();
     static bool CheckPosition(const cocos2d::Vec2& pos);           //¼ì²éÊÇ·ñ×²Ç½£¨f×ø±ê£©
     static bool isWall(const cocos2d::Vec2& tilePos);              //¼ì²éÊÇ·ñ×²Ç½£¨int×ø±ê£©

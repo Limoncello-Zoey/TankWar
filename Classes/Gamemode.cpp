@@ -7,22 +7,38 @@
 
 USING_NS_CC;
 
+const float Gamemode::GRID_SIZE = 45.0f;
 const float ROTATION_SPEED = 360.0f;   
 const float ANGLE_THRESHOLD = 5.0f;
 Tank* Gamemode::Tank1=nullptr;
 Tank* Gamemode::Tank2 = nullptr;
-Tank** Gamemode::Self = nullptr;
-Tank** Gamemode::Other = nullptr;
+int Gamemode::_self = 0;
 
 std::vector<std::vector<int>> Gamemode::walls;
+
+Tank* Gamemode::Self()
+{
+    if (_self == 1)
+        return Tank1;
+    if (_self == 2)
+        return Tank2;
+    return nullptr;
+}
+
+Tank* Gamemode::Other()
+{
+    if (_self == 1)
+        return Tank2;
+    if (_self == 2)
+        return Tank1;
+    return nullptr;
+}
 
 Scene* Gamemode::createScene()
 {
     return Gamemode::create();
 }
 
-const float Gamemode::GRID_SIZE = 45.0f;
-// on "init" you need to initialize your instance
 bool Gamemode::init()
 {
     if (!Scene::init()) return false;
@@ -48,7 +64,11 @@ bool Gamemode::init()
 
 void Gamemode::update(float delta)
 {
-    //checkBulletCollisions();
+    TankPosition tankPos;
+    tankPos.x = Gamemode::Self()->getPositionX();
+    tankPos.y = Gamemode::Self()->getPositionY();
+	tankPos.angle = Gamemode::Self()->getRotation();
+    NetworkManager::getInstance()->SendGameMessage(MessageType::Position, tankPos);
 }
 
 void Gamemode::MapSetUp() 
@@ -101,22 +121,9 @@ void Gamemode::initTank()
     Gamemode::Tank2 = Tank::create();
     Gamemode::Tank2->setPosition(120.0f + GRID_SIZE * 1.1f, 80.0f + GRID_SIZE * 1.1f);
     addChild(Gamemode::Tank2);
-    (*Self)->RegisterControls();
+    Gamemode::Self()->RegisterControls();
 }
 
-
-//void Gamemode::Shoot() 
-//{
-//    auto listener = EventListenerMouse::create();
-//
-//    // Êó±ê×ó¼üÉä»÷
-//    listener->onMouseDown = [=](EventMouse* event) 
-//        {
-//            Tank1->fire();
-//        };
-//
-//    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-//}
 void Gamemode::spawnBullet(const Vec2& spawnPos,float radians) 
 {
     auto bullet = Bullet::create();

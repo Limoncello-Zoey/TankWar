@@ -56,7 +56,7 @@ void Bullet::checkBulletCollisions1()//检测与坦克碰撞
         Director::getInstance()->replaceScene(gameover);
         this->removeFromParent();
     }
-    
+ 
 }
 
 void Bullet::checkBulletCollisions2()//检测与坦克碰撞

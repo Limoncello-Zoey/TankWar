@@ -130,7 +130,7 @@ void Tank::RegisterControls()
     // Êó±ê×ó¼üÉä»÷
     listener2->onMouseDown = [=](EventMouse* event)
     {
-        NetworkManager::getInstance()->NetworkManager::SendGameMessage(MessageType::PlayerAttack, AttackInfo{true});
+        NetworkManager::getInstance()->NetworkManager::SendGameMessage(MessageType::Attack, AttackInfo{true});
         fire();
     };
 

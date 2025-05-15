@@ -28,8 +28,8 @@ enum class MessageType : uint8_t
 {
     ServerBroadcast,  // 服务器广播响应 
     ClientJoin,       // 客户端加入请求 
-    PlayerMove,       // 玩家移动 
-    PlayerAttack,     // 玩家攻击 
+    Position,       // 玩家移动 
+    Attack,     // 玩家攻击 
     GameSync          // 游戏状态同步 
 };
 
@@ -56,7 +56,7 @@ struct ServerInfo
 	uint16_t gamePort;
 };
 
-struct PlayerInput
+struct TankPosition
 {
 	float x, y;
 	float angle;
