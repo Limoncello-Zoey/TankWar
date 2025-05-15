@@ -9,7 +9,8 @@ USING_NS_CC;
 
 float Bullet::radius;
 
-bool Bullet::init() {
+bool Bullet::init() 
+{
     if (!Sprite::init()) return false;
 	this->setCameraMask((unsigned short)CameraFlag::USER1, true);
     this->scheduleUpdate();
@@ -17,7 +18,8 @@ bool Bullet::init() {
     return true;
 }
 
-void Bullet::setup(const Vec2& startPos, const cocos2d::Vec2& direction) {
+void Bullet::setup(const Vec2& startPos, const cocos2d::Vec2& direction)
+{
     std::string texture = "Bullet.png";
     this->initWithFile(texture);
     velocity = direction.getNormalized() * 150.0f;
@@ -27,28 +29,31 @@ void Bullet::setup(const Vec2& startPos, const cocos2d::Vec2& direction) {
     maxBounce = 5;
 }
 
-void Bullet::update(float delta) {
+void Bullet::update(float delta) 
+{
     Vec2 newPos = this->getPosition() + velocity * delta;
     //¼ì²â×²Ç½
     // Ô¤²âÎ»ÖÃ¼ì²é
     auto scene = dynamic_cast<Gamemode*>(this->getParent());
-    if (scene && !scene->CheckPosition(newPos)) {
+    if (scene && !scene->CheckPosition(newPos)) 
+    {
         handleWallCollision();
     }
-    else {
+    else 
+    {
         this->setPosition(newPos);
     }
     //¼ì²â×²Ì¹¿Ë
-    checkBulletCollisions1();
-    checkBulletCollisions2();
+    if(this->isRunning())
+    checkBulletCollisions();
 }
 
 
-void Bullet::checkBulletCollisions1()//¼ì²âÓëÌ¹¿ËÅö×²
+void Bullet::checkBulletCollisions()//¼ì²âÓëÌ¹¿ËÅö×²
 {
     
     Vec2 center1 = this->getPosition();
-    Vec2 center2 = Gamemode::Tank1->getPosition();
+    Vec2 center2 = Gamemode::Self()->getPosition();
     
     if (Gamemode::isCircleCollision(center1, Bullet::radius, center2, Tank::radius))
     {
@@ -59,62 +64,52 @@ void Bullet::checkBulletCollisions1()//¼ì²âÓëÌ¹¿ËÅö×²
  
 }
 
-void Bullet::checkBulletCollisions2()//¼ì²âÓëÌ¹¿ËÅö×²
+void Bullet::handleWallCollision() 
 {
-
-    Vec2 center1 = this->getPosition();
-    Vec2 center2 = Gamemode::Tank2->getPosition();
-
-    if (Gamemode::isCircleCollision(center1, Bullet::radius, center2, Tank::radius))
-    {
-        Scene* gameover = Gameover::createScene();
-        Director::getInstance()->replaceScene(gameover);
-        this->removeFromParent();
-    }
-
-}
-
-void Bullet::handleWallCollision() {
     
     auto scene = dynamic_cast<Gamemode*>(this->getParent());
     bool bounceX = false, bounceY = false;
     Vec2 Pos = this->getPosition();
     Vec2 tilePos = scene->NowPosition(this->getPosition());
-    if ((scene->isWall(tilePos + Vec2(1, 0)) || scene->isWall(tilePos + Vec2(-1, 0))) && (scene->isWall(tilePos + Vec2(0, 1)) || scene->isWall(tilePos + Vec2(0, -1)))) {
+    if ((scene->isWall(tilePos + Vec2(1, 0)) || scene->isWall(tilePos + Vec2(-1, 0))) && (scene->isWall(tilePos + Vec2(0, 1)) || scene->isWall(tilePos + Vec2(0, -1)))) 
+    {
         float closedisx = scene->distancex(Pos);
         float closedisy = scene->distancey(Pos);
         //std::cout << closedisx << "  " << closedisy << std::endl;
         if (closedisx > closedisy) velocity.y *= -1;
         else velocity.x *= -1;
         currentBounce++;
-        if (currentBounce >= maxBounce) {
-            destroyBullet();
+        if (currentBounce >= maxBounce) 
+        {
+            this->removeFromParent();
         }
         //system("pause");
     }
     // ¼ì²éËÄÖÜµÄÇ½
-    else {
-        if (scene->isWall(tilePos + Vec2(1, 0)) || scene->isWall(tilePos + Vec2(-1, 0))) {
+    else 
+    {
+        if (scene->isWall(tilePos + Vec2(1, 0)) || scene->isWall(tilePos + Vec2(-1, 0))) 
+        {
             velocity.x *= -1;
             bounceX = true;
         }
-        if (scene->isWall(tilePos + Vec2(0, 1)) || scene->isWall(tilePos + Vec2(0, -1))) {
+        if (scene->isWall(tilePos + Vec2(0, 1)) || scene->isWall(tilePos + Vec2(0, -1))) 
+        {
             velocity.y *= -1;
             bounceY = true;
         }
 
-        if (bounceX || bounceY) {
+        if (bounceX || bounceY) 
+        {
             currentBounce++;
             //system("pause");
             // ¸üÐÂÐý×ª½Ç¶È
             this->setRotation(CC_RADIANS_TO_DEGREES(-velocity.getAngle()));
 
-            if (currentBounce >= maxBounce) {
-                destroyBullet();
+            if (currentBounce >= maxBounce) 
+            {
+                this->removeFromParent();
             }
         }
     }
-}
-void Bullet::destroyBullet() {
-    this->removeFromParent();
 }

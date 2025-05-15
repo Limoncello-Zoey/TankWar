@@ -58,6 +58,7 @@ bool Gamemode::init()
     
     this->setCameraMask((unsigned short)CameraFlag::USER1,true);
     
+	this->scheduleUpdate();
 
     return true;
 }
@@ -129,7 +130,6 @@ void Gamemode::spawnBullet(const Vec2& spawnPos,float radians)
     auto bullet = Bullet::create();
     Vec2 direction = Vec2(cos(radians), sin(radians));
     bullet->setup(spawnPos, direction);
-    activeBullets.pushBack(bullet);
     addChild(bullet);
 }
 

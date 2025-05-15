@@ -18,7 +18,5 @@ public:
 
     void update(float delta) override;
     void handleWallCollision();
-    void Bullet::destroyBullet();
-	void checkBulletCollisions1();
-    void checkBulletCollisions2();
+	void checkBulletCollisions();
 };

@@ -277,6 +277,7 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 		case MessageType::Position:
 		{
 			TankPosition* input = (TankPosition*)msg.payload;
+			cocos2d::log("x: %f, y: %f, angle: %f", input->x, input->y, input->angle);
 			RunOnMainThread([=]() 
 			{
 				Gamemode::Other()->setPosition(input->x, input->y);

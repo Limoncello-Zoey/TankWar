@@ -14,7 +14,6 @@ public:
     static std::vector<std::vector<int>> walls;
 
     //tank
-    cocos2d::Vector<Bullet*> activeBullets;
     static Tank* Tank1;
     static Tank* Tank2;
     static int _self;
