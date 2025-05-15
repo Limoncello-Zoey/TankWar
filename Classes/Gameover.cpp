@@ -33,6 +33,7 @@ bool Gameover::init()
     continuemenu->setPosition(Vec2::ZERO);
     this->addChild(continuemenu, 2);
 
+
     return true;
 }
 

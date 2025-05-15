@@ -61,7 +61,6 @@ void Bullet::checkBulletCollisions()//¼ì²âÓëÌ¹¿ËÅö×²
 		gameover->_win = false;
 		gameover->ChangeText("You Lose!");
         Director::getInstance()->replaceScene(gameover);
-        this->removeFromParent();
 
 		NetworkManager::getInstance()->SendGameMessage(MessageType::Die, true);
     }

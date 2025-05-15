@@ -61,6 +61,8 @@ bool WaitingHall::init()
 	//auto background = Sprite::create("background.png");
 	//background->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2));
 
+	NetworkManager::getInstance()->Reset();
+
 	return true;
 }
 

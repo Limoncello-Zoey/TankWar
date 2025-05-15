@@ -42,35 +42,13 @@ NetworkManager::~NetworkManager()
 #ifdef _WIN32 
 	WSACleanup();
 #endif 
-	if (m_runThread.joinable()) {
-		m_run = false;
-		m_runThread.join();
-	}
-	if (m_broadcastRespondThread.joinable()) {
-		m_broadcastRespondRun = false;
-		m_broadcastRespondThread.join();
-	}
+	Reset();
 }
 
 // 房主端初始化 
 bool NetworkManager::HostInitialize()
 {
-	// 关闭之前的线程
-	m_run = false;
-	if (m_broadcastRespondThread.joinable())
-	{
-		m_broadcastRespondRun = false;
-		m_broadcastRespondThread.join();
-	}
-
-	rec_serialNumber = 0;
-	send_serialNumber = 0;
-
-	// 初始化，创建游戏通信socket
-	if (m_socket != 0)
-	{
-		closesocket(m_socket);
-	}
+	Reset();
 	m_socket = CreateUDPSocket(0);
 	if (m_socket == -1) return false;
 	m_port = GetPort(m_socket);
@@ -80,8 +58,6 @@ bool NetworkManager::HostInitialize()
 	m_broadcastRespondRun = true;
 	m_broadcastRespondThread = std::thread(&NetworkManager::BroadcastResponder, this);
 	return true;
-
-
 }
 
 NetworkManager* NetworkManager::getInstance()
@@ -93,12 +69,8 @@ NetworkManager* NetworkManager::getInstance()
 // 客户端初始化 
 bool NetworkManager::ClientInitialize()
 {
-
-	rec_serialNumber = 0;
-	send_serialNumber = 0;
-
+	Reset();
 	// 创建游戏通信socket 
-	closesocket(m_socket);
 	m_socket = CreateUDPSocket(0);
 	if (m_socket == -1) return false;
 	m_port = GetPort(m_socket);
@@ -236,12 +208,6 @@ bool NetworkManager::ReceiveServerInfo(int sock)
 }
 
 
-//	ServerBroadcast,   服务器广播响应 
-//	ClientJoin,        客户端加入请求 
-//	PlayerMove,        玩家移动 
-//	PlayerAttack,      玩家攻击 
-//	GameSync           游戏状态同步 
-
 //run线程中的,阻塞之后调用
 void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& from)
 {
@@ -281,7 +247,7 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 			TankPosition* input = (TankPosition*)msg.payload;
 			RunOnMainThread([=]() 
 			{
-				if (Gamemode::Other() == nullptr || !dynamic_cast<Gamemode*>(cocos2d::Director::getInstance()->getRunningScene())) return;
+				if (!dynamic_cast<Gamemode*>(cocos2d::Director::getInstance()->getRunningScene()) || Gamemode::Other() == nullptr) return;
 				Gamemode::Other()->setPosition(input->x, input->y);
 				Gamemode::Other()->setRotation(input->angle);
 			});
@@ -314,24 +280,12 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 void NetworkManager::HostMain()
 {
 	if (!HostInitialize()) return;
-
-	if (m_runThread.joinable()) {
-		m_run = false;
-		m_runThread.join();
-	}
 	m_runThread = std::thread(&NetworkManager::ReceiveLoop, this);
 }
 
 void NetworkManager::ClientMain()
 {
-	if (m_runThread.joinable()) 
-	{
-		m_run = false;
-		m_runThread.join();
-	}
-
 	ClientInitialize();
-
 	m_runThread = std::thread(&NetworkManager::ReceiveLoop, this);
 
 	// 发送加入请求 
@@ -341,6 +295,34 @@ void NetworkManager::ClientMain()
 	
 	auto gameScene = Gamemode::create();
 	cocos2d::Director::getInstance()->replaceScene(gameScene);
+}
+
+void NetworkManager::Reset()
+{
+	//先关线程
+	m_run = false;
+	if (m_runThread.joinable())
+	{
+		//m_runThread.join();
+		m_runThread.detach();
+	}
+
+	m_broadcastRespondRun = false;
+	if (m_broadcastRespondThread.joinable())
+	{
+		//m_broadcastRespondThread.join();
+		m_broadcastRespondThread.detach();
+	}
+	//再关socket
+	closesocket(m_socket);
+	//再置零
+	m_socket = 0;
+	rec_serialNumber = 0;
+	send_serialNumber = 0;
+	m_port = 0;
+	Gamemode::_self = 0;
+	Gamemode::Tank1 = nullptr;
+	Gamemode::Tank2 = nullptr;
 }
 
 //////////////////////////////////////////////////////////////////////////////////

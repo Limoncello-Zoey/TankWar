@@ -10,7 +10,7 @@ USING_NS_CC;
 const float Gamemode::GRID_SIZE = 45.0f;
 const float ROTATION_SPEED = 360.0f;   
 const float ANGLE_THRESHOLD = 5.0f;
-Tank* Gamemode::Tank1=nullptr;
+Tank* Gamemode::Tank1 = nullptr;
 Tank* Gamemode::Tank2 = nullptr;
 int Gamemode::_self = 0;
 

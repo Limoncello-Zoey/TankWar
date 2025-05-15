@@ -73,6 +73,8 @@ class NetworkManager {
 public:
 	int m_port;
 
+	void Reset();
+
 	NetworkManager();
 
 	~NetworkManager();
