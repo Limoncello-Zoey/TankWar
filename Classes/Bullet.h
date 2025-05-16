@@ -2,6 +2,7 @@
 #include "cocos2d.h"
 
 
+
 class Bullet : public cocos2d::Sprite {
 public:
     CREATE_FUNC(Bullet);
@@ -17,6 +18,5 @@ public:
 
     void update(float delta) override;
     void handleWallCollision();
-    void Bullet::destroyBullet();
-	void checkBulletCollisions();//¼ì²â×Óµ¯ÓëÌ¹¿ËÅö×²
+	void checkBulletCollisions();
 };

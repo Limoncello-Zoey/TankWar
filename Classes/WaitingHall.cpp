@@ -1,6 +1,9 @@
 #include "WaitingHall.h"
+
+#include "Gamemode.h"
 using namespace std;
 using namespace cocos2d;
+using namespace ui;
 using namespace network;
 
 bool WaitingHall::init()
@@ -14,15 +17,32 @@ bool WaitingHall::init()
 	// add buttons
 	auto CreateButton = Button::create("CreateRoomNormal.png", "CreateRoomSelected.png");
 	auto JoinButton = Button::create("JoinRoomNormal.png", "JoinRoomSelected.png");
+	auto DemoButton = Button::create("DemoNormal.png", "DemoSelected.png");
 
 	CreateButton->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 + 100-300));
 	JoinButton->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 - 100-300));
+	DemoButton->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 + 300 - 300));
 
 	CreateButton->addTouchEventListener(CC_CALLBACK_2(WaitingHall::onCreateRoomClicked, this));
 	JoinButton->addTouchEventListener(CC_CALLBACK_2(WaitingHall::onJoinRoomClicked, this));
+	DemoButton->addTouchEventListener(CC_CALLBACK_2(WaitingHall::onDemoClicked, this));
 
 	this->addChild(CreateButton);
 	this->addChild(JoinButton);
+	this->addChild(DemoButton);
+
+	//add output bar
+	auto outputbar = Label::createWithTTF(
+		"这是一段长文本，当内容超过指定宽度时会自动换行。",
+		"fonts/Marker Felt.ttf", 24,
+		Size(400, 0), // 宽度固定为400，高度自适应
+		TextHAlignment::LEFT
+	);
+	outputbar->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 ));
+	outputbar->setTextColor(Color4B::WHITE);
+	outputbar->setOpacity(255);
+	this->addChild(outputbar,-2);
+
 
 	// Create labels for buttons
 	
@@ -41,6 +61,8 @@ bool WaitingHall::init()
 	//auto background = Sprite::create("background.png");
 	//background->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2));
 
+	NetworkManager::getInstance()->Reset();
+
 	return true;
 }
 
@@ -54,7 +76,7 @@ void WaitingHall::onCreateRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEve
 	if (type != ui::Widget::TouchEventType::ENDED)
 		return;
 	// Handle create room button click
-	//UdpManager::getInstance()->startHostBroadcast(12345);
+	NetworkManager::getInstance()->HostMain();
 
 
 }
@@ -63,18 +85,13 @@ void WaitingHall::onJoinRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEvent
 {
 	if (type != ui::Widget::TouchEventType::ENDED) 
 		return;
+	NetworkManager::getInstance()->ClientMain();
 	// Handle join room button click
-	auto recall = [=](std::string ip, int port) 
-	{
-		this->onRoomFound(ip, port);
-	};
-	//UdpManager::getInstance()->searchHosts(recall);
-	//UdpManager::getInstance()->searchHosts(CC_CALLBACK_2(WaitingHall::onRoomFound,UdpManager::getInstance()));
 }
 
-void WaitingHall::onRoomFound(std::string ip, int port)
+void WaitingHall::onDemoClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType type)
 {
-	// Handle room found
-	log("Room found at %s:%d", ip.c_str(), port);
-	// 这里可以添加代码来处理找到的房间，例如显示在UI上
+	auto s = Gamemode::create();
+	Director::getInstance()->replaceScene(s);
 }
+

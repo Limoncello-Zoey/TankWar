@@ -1,9 +1,9 @@
-#ifndef __GAMEMODE_H__
-#define __GAMEMODE_H__
+#pragma once
 
 #include "cocos2d.h"
 #include "Bullet.h"
 #include "Tank.h"
+
 
 class Gamemode : public cocos2d::Scene
 {
@@ -14,10 +14,11 @@ public:
     static std::vector<std::vector<int>> walls;
 
     //tank
-    cocos2d::Vector<Bullet*> activeBullets;
     static Tank* Tank1;
+    static Tank* Tank2;
+    static int _self;
     cocos2d::Vec2 velocity;
-
+    
     //camera
     cocos2d::Camera* _camera;
 
@@ -39,6 +40,8 @@ public:
     void MapSetUp();
 
     //tanks & bullets
+    static Tank* Self();
+    static Tank* Other();
     void initTank();
     static bool CheckPosition(const cocos2d::Vec2& pos);           //¼ì²éÊÇ·ñ×²Ç½£¨f×ø±ê£©
     static bool isWall(const cocos2d::Vec2& tilePos);              //¼ì²éÊÇ·ñ×²Ç½£¨int×ø±ê£©
@@ -54,5 +57,3 @@ public:
     /*void Shoot();*/
     
 };
-
-#endif
