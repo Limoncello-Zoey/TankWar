@@ -7,28 +7,47 @@
 
 USING_NS_CC;
 
+const float Gamemode::GRID_SIZE = 45.0f;
 const float ROTATION_SPEED = 360.0f;   
 const float ANGLE_THRESHOLD = 5.0f;
-Tank* Gamemode::Tank1=nullptr;
+Tank* Gamemode::Tank1 = nullptr;
+Tank* Gamemode::Tank2 = nullptr;
+int Gamemode::_self = 0;
+
 std::vector<std::vector<int>> Gamemode::walls;
+
+Tank* Gamemode::Self()
+{
+    if (_self == 1)
+        return Tank1;
+    if (_self == 2)
+        return Tank2;
+    return nullptr;
+}
+
+Tank* Gamemode::Other()
+{
+    if (_self == 1)
+        return Tank2;
+    if (_self == 2)
+        return Tank1;
+    return nullptr;
+}
 
 Scene* Gamemode::createScene()
 {
     return Gamemode::create();
 }
 
-const float Gamemode::GRID_SIZE = 45.0f;
-// on "init" you need to initialize your instance
 bool Gamemode::init()
 {
     if (!Scene::init()) return false;
     MapSetUp();
-
+    
     initTank();
-    //Tank1->Controls();
-    Gamemode::Tank1->RegisterControls();//注册监听器
-
-
+    
+    //只有tank1是直接由键盘控制的，tank2由数据包控制
+    
     Camera::getDefaultCamera()->setVisible(false);//禁用默认相机
     auto visiblesize = Director::getInstance()->getVisibleSize();
     _camera=Camera::createOrthographic(visiblesize.width, visiblesize.height, 0, 1000);//自定义相机
@@ -39,13 +58,18 @@ bool Gamemode::init()
     
     this->setCameraMask((unsigned short)CameraFlag::USER1,true);
     
+	this->scheduleUpdate();
 
     return true;
 }
 
 void Gamemode::update(float delta)
 {
-    //checkBulletCollisions();
+    TankPosition tankPos;
+    tankPos.x = Gamemode::Self()->getPositionX();
+    tankPos.y = Gamemode::Self()->getPositionY();
+	tankPos.angle = Gamemode::Self()->getRotation();
+    NetworkManager::getInstance()->SendGameMessage(MessageType::Position, tankPos);
 }
 
 void Gamemode::MapSetUp() 
@@ -95,27 +119,17 @@ void Gamemode::initTank()
     Gamemode::Tank1 = Tank::create();
     Gamemode::Tank1->setPosition(80.0f + GRID_SIZE * 1.1f, 60.0f + GRID_SIZE * 1.1f);
     addChild(Gamemode::Tank1);
+    Gamemode::Tank2 = Tank::create();
+    Gamemode::Tank2->setPosition(120.0f + GRID_SIZE * 1.1f, 80.0f + GRID_SIZE * 1.1f);
+    addChild(Gamemode::Tank2);
+    Gamemode::Self()->RegisterControls();
 }
 
-
-//void Gamemode::Shoot() 
-//{
-//    auto listener = EventListenerMouse::create();
-//
-//    // 鼠标左键射击
-//    listener->onMouseDown = [=](EventMouse* event) 
-//        {
-//            Tank1->fire();
-//        };
-//
-//    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-//}
 void Gamemode::spawnBullet(const Vec2& spawnPos,float radians) 
 {
     auto bullet = Bullet::create();
     Vec2 direction = Vec2(cos(radians), sin(radians));
     bullet->setup(spawnPos, direction);
-    activeBullets.pushBack(bullet);
     addChild(bullet);
 }
 
@@ -169,26 +183,6 @@ bool Gamemode::checkCollision(const Vec2& pos)
     return false;
 }
 
-//void Gamemode::checkBulletCollisions()
-//{
-//    for (ssize_t i = 0; i < activeBullets.size(); ++i) 
-//    {
-//        auto bullet = activeBullets.at(i);
-//        Vec2 center1 = bullet->getPosition();
-//        Vec2 center2 = Tank1->getPosition();
-//        float radius1 = bullet->getContentSize().width / 2;
-//        float radius2 = Tank1->getContentSize().width / 2;
-//        // 检测墙壁碰撞
-//        if (isCircleCollision(center1, radius1, center2, radius2)) 
-//        {
-//            Scene* gameover = Gameover::createScene();
-//            CCDirector::sharedDirector()->replaceScene(gameover);
-//            bullet->removeFromParent();
-//            activeBullets.erase(i--);
-//            continue;
-//        }
-//    }
-//}
 
 bool Gamemode::CheckPosition(const Vec2& pos)
 {

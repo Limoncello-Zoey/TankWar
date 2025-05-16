@@ -1,12 +1,8 @@
 #pragma once
 #include "cocos2d.h"
-/// <summary>
-/// 
-/// </summary>
+#include "Network.h"
+
 class Gamemode;
-/// <summary>
-/// 
-/// </summary>
 
 class Tank : public cocos2d::Sprite {
 public:
@@ -14,6 +10,7 @@ public:
     float fireCooldown = 0.0f;
     cocos2d::Vec2 velocity;
     static float radius;
+    //Scene* scene;
 
     CREATE_FUNC(Tank);
     bool init() override;

@@ -4,17 +4,17 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 
+//
 USING_NS_CC;
 
 const float ROTATION_SPEED = 360.0f;
 const float ANGLE_THRESHOLD = 5.0f;
 float Tank::radius;
-
+//shitrgherg
 bool Tank::init() 
 {
     if (!Sprite::initWithFile("Tankbody.png")) return false;
     setAnchorPoint(Vec2(0.5f, 0.5f));
-    RegisterControls();
     this->scheduleUpdate();
 	radius = this->getContentSize().width / 2;
     return true;
@@ -28,7 +28,6 @@ void Tank::fire()
     Vec2 spawnPos = this->getPosition() +
         Vec2(cos(radians), sin(radians)) * offset;
     scene->spawnBullet(spawnPos,radians);
-
 }
 void Tank::update(float delta) 
 {
@@ -52,7 +51,7 @@ void Tank::update(float delta)
         this->setPosition(newPosy);
     }
     updateRotation(delta);
-    if (fireCooldown > 0) 
+    if (fireCooldown > 0)
     {
         fireCooldown -= delta;
     }
@@ -82,45 +81,9 @@ void Tank::updateRotation(float delta)
         this->setRotation(targetRotation);
     }
 }
-//void Tank::Controls() 
-//{
-//    auto listener = EventListenerKeyboard::create();
-//
-//    // 按键按下
-//    listener->onKeyPressed = [=](EventKeyboard::KeyCode key, Event* e) {
-//        switch (key) {
-//        case EventKeyboard::KeyCode::KEY_W:
-//            velocity.y = 100.0f; // 上移速度
-//            break;
-//        case EventKeyboard::KeyCode::KEY_S:
-//            velocity.y = -100.0f;
-//            break;
-//        case EventKeyboard::KeyCode::KEY_A:
-//            velocity.x = -100.0f;
-//            break;
-//        case EventKeyboard::KeyCode::KEY_D:
-//            velocity.x = 100.0f;
-//            break;
-//        }
-//        };
-//
-//    // 按键释放
-//    listener->onKeyReleased = [=](EventKeyboard::KeyCode key, Event* e) {
-//        switch (key) {
-//        case EventKeyboard::KeyCode::KEY_W:
-//        case EventKeyboard::KeyCode::KEY_S:
-//            velocity.y = 0.0f;
-//            break;
-//        case EventKeyboard::KeyCode::KEY_A:
-//        case EventKeyboard::KeyCode::KEY_D:
-//            velocity.x = 0.0f;
-//            break;
-//        }
-//        };
-//    //Gamemode::update(1.0f);
-//    _eventDispatcher->addEventListenerWithSceneGraphPriority(listener, this);
-//}
 
+
+//控制的是自己的，所以对应着发包
 void Tank::RegisterControls()
 {
     auto listener = EventListenerKeyboard::create();
@@ -167,6 +130,7 @@ void Tank::RegisterControls()
     // 鼠标左键射击
     listener2->onMouseDown = [=](EventMouse* event)
     {
+        NetworkManager::getInstance()->NetworkManager::SendGameMessage(MessageType::Attack, AttackInfo{true});
         fire();
     };
 
