@@ -26,7 +26,18 @@ void Tank::fire()
     const float offset = 40.0f;
     float radians = CC_DEGREES_TO_RADIANS(-this->getRotation());
 
-    Vec2 spawnPos = this->getPosition() +
+    /*Vec2 tilePos;
+    Vec2 newPos;
+    do {
+        newPos = this->getPosition();
+        tilePos = Vec2(
+            floor((newPos.x) / 45.0f),
+            floor(newPos.y / 45.0f));
+    }
+    while (tilePos.x < 0 || tilePos.x >= 20 || tilePos.y < 0 || tilePos.y >= 15);*/
+
+
+    Vec2 spawnPos = /*newPos*/this->getPosition() +
         Vec2(cos(radians), sin(radians)) * offset;
 
     scene->spawnBullet(spawnPos,radians);

@@ -32,6 +32,8 @@ void Bullet::setup(const Vec2& startPos, const cocos2d::Vec2& direction)
 void Bullet::update(float delta) 
 {
     Vec2 newPos = this->getPosition() + velocity * delta;
+    
+    
     //¼ì²â×²Ç½
     // Ô¤²âÎ»ÖÃ¼ì²é
     auto scene = dynamic_cast<Gamemode*>(Director::getInstance()->getRunningScene());

@@ -4,6 +4,8 @@
 #include "Gameover.h"
 #include "Tank.h"
 
+using namespace cocos2d;
+
 //////////////////////////////////////////////////////////////////////////////////
 bool GameMessage::Validate() const 
 {
@@ -274,11 +276,19 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 		case MessageType::Position:
 		{
 			/*if(!Gamemode::Other()->isRunning()) break;*/
-			TankPosition* input = (TankPosition*)msg.payload;
 			RunOnMainThread([=]() 
 			{
-				if (!dynamic_cast<Gamemode*>(cocos2d::Director::getInstance()->getRunningScene()) || Gamemode::Other() == nullptr) return;
-				auto pos = Gamemode::Other()->getPosition();
+				TankPosition* input = (TankPosition*)msg.payload;
+				if (!dynamic_cast<Gamemode*>(cocos2d::Director::getInstance()->getRunningScene()) || Gamemode::Other() == nullptr) 
+					return;
+				auto pos = cocos2d::Vec2(input->x,input->y);
+				Vec2 tilePos;
+				tilePos = Vec2(
+					floor((pos.x) / 45.0f),
+					floor(pos.y / 45.0f));
+				if (tilePos.x < 0 || tilePos.x >= 20 || tilePos.y < 0 || tilePos.y >= 15) {
+					return;
+				}
 				if (pos.x == input->x && pos.y == input->y && Gamemode::Other()->getRotation() == input->angle) {
 					return;
 				}
