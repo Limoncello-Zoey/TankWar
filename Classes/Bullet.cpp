@@ -11,7 +11,8 @@ float Bullet::radius;
 
 bool Bullet::init() 
 {
-    if (!Sprite::init()) return false;
+    std::string texture = "Bullet.png";
+    if (!Sprite::initWithFile(texture)) return false;
 	this->setCameraMask((unsigned short)CameraFlag::USER1, true);
     this->scheduleUpdate();
 	radius = this->getContentSize().width / 2;
@@ -20,8 +21,7 @@ bool Bullet::init()
 
 void Bullet::setup(const Vec2& startPos, const cocos2d::Vec2& direction)
 {
-    std::string texture = "Bullet.png";
-    this->initWithFile(texture);
+    
     velocity = direction.getNormalized() * 150.0f;
     this->setPosition(startPos);
     this->setRotation(CC_RADIANS_TO_DEGREES(-velocity.getAngle()));

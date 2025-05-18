@@ -61,13 +61,6 @@ bool Gamemode::init()
     
     this->setCameraMask((unsigned short)CameraFlag::USER1,true);
     
-    auto listener = EventListenerCustom::create("FIRE", [this](EventCustom* event) 
-        {
-            Other()->fire();
-            event->release();
-        });
-    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, Self());
-
 	this->scheduleUpdate();
 
     return true;
@@ -95,6 +88,7 @@ void Gamemode::update(float delta)
 		Tracing = Tracing + (target->getPosition() - Tracing) * 0.1f;
         _camera->setPosition(Tracing - compensate);
     }
+
     NetworkManager::getInstance()->SendGameMessage(MessageType::Position, tankPos);
 }
 

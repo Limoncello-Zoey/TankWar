@@ -38,10 +38,7 @@ void Tank::update(float delta)
     float radians = CC_DEGREES_TO_RADIANS(-this->getRotation());
     float forwardx = cos(radians);
     float forwardy = sin(radians);
-    /*Vec2 newPos = Tank1->getPosition() + forward * velocity.length() * delta;
-    if (!checkCollision(newPos)) {
-        Tank1->setPosition(newPos);
-    }*/
+    
     Vec2 newPosx(this->getPositionX() + forwardx * velocity.length() * delta, this->getPositionY());
     if (!scene->checkCollision(newPosx)) 
     {

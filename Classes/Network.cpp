@@ -278,6 +278,10 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 			RunOnMainThread([=]() 
 			{
 				if (!dynamic_cast<Gamemode*>(cocos2d::Director::getInstance()->getRunningScene()) || Gamemode::Other() == nullptr) return;
+				auto pos = Gamemode::Other()->getPosition();
+				if (pos.x == input->x && pos.y == input->y && Gamemode::Other()->getRotation() == input->angle) {
+					return;
+				}
 				Gamemode::Other()->setPosition(input->x, input->y);
 				Gamemode::Other()->setRotation(input->angle);
 			});
@@ -285,9 +289,9 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 		}
 		case MessageType::Attack:
 		{
-			auto event = new cocos2d::EventCustom("FIRE");
-			event->setUserData(this);
-			cocos2d::Director::getInstance()->getEventDispatcher()->dispatchEvent(event);
+			RunOnMainThread([=]() {
+				Gamemode::Other()->fire();
+				});
 			break;
 		}
 		//收到消息意味着自己赢了
