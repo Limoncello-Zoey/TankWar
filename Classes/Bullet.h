@@ -17,6 +17,6 @@ public:
     int currentBounce = 0;
 
     void update(float delta) override;
-    void handleWallCollision();
+    bool handleWallCollision();
 	void checkBulletCollisions();
 };

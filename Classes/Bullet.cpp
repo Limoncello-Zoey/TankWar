@@ -34,18 +34,20 @@ void Bullet::update(float delta)
     Vec2 newPos = this->getPosition() + velocity * delta;
     //¼ì²â×²Ç½
     // Ô¤²âÎ»ÖÃ¼ì²é
-    auto scene = dynamic_cast<Gamemode*>(this->getParent());
+    auto scene = dynamic_cast<Gamemode*>(Director::getInstance()->getRunningScene());
+    bool isRemoved = false;
     if (scene && !scene->CheckPosition(newPos)) 
     {
-        handleWallCollision();
+        isRemoved = handleWallCollision();
     }
     else 
     {
         this->setPosition(newPos);
     }
-    //¼ì²â×²Ì¹¿Ë
-    if(this->isRunning())
-    checkBulletCollisions();
+    //¼ì²â×²Ì¹
+    if (!isRemoved)
+        if(this->isRunning())
+            checkBulletCollisions();
 }
 
 
@@ -67,14 +69,15 @@ void Bullet::checkBulletCollisions()//¼ì²âÓëÌ¹¿ËÅö×²
  
 }
 
-void Bullet::handleWallCollision() 
+bool Bullet::handleWallCollision() 
 {
     
     auto scene = dynamic_cast<Gamemode*>(this->getParent());
     bool bounceX = false, bounceY = false;
     Vec2 Pos = this->getPosition();
     Vec2 tilePos = scene->NowPosition(this->getPosition());
-    if ((scene->isWall(tilePos + Vec2(1, 0)) || scene->isWall(tilePos + Vec2(-1, 0))) && (scene->isWall(tilePos + Vec2(0, 1)) || scene->isWall(tilePos + Vec2(0, -1)))) 
+    if ((scene->isWall(tilePos + Vec2(1, 0)) || scene->isWall(tilePos + Vec2(-1, 0))) 
+        && (scene->isWall(tilePos + Vec2(0, 1)) || scene->isWall(tilePos + Vec2(0, -1)))) 
     {
         float closedisx = scene->distancex(Pos);
         float closedisy = scene->distancey(Pos);
@@ -85,8 +88,10 @@ void Bullet::handleWallCollision()
         if (currentBounce >= maxBounce) 
         {
             this->removeFromParent();
+            return true;
         }
         //system("pause");
+        
     }
     // ¼ì²éËÄÖÜµÄÇ½
     else 
@@ -112,7 +117,9 @@ void Bullet::handleWallCollision()
             if (currentBounce >= maxBounce) 
             {
                 this->removeFromParent();
+                return true;
             }
         }
     }
+    return false;
 }

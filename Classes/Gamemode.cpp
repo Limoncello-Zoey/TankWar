@@ -120,7 +120,7 @@ void Gamemode::initTank()
     Gamemode::Tank1->setPosition(80.0f + GRID_SIZE * 1.1f, 60.0f + GRID_SIZE * 1.1f);
     addChild(Gamemode::Tank1);
     Gamemode::Tank2 = Tank::create();
-    Gamemode::Tank2->setPosition(120.0f + GRID_SIZE * 1.1f, 80.0f + GRID_SIZE * 1.1f);
+    Gamemode::Tank2->setPosition(120.0f + GRID_SIZE * 13.1f, 80.0f + GRID_SIZE * 11.1f);
     addChild(Gamemode::Tank2);
     Gamemode::Self()->RegisterControls();
 }
