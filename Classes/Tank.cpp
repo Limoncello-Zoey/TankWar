@@ -25,8 +25,10 @@ void Tank::fire()
     auto scene = dynamic_cast<Gamemode*>(this->getParent());
     const float offset = 40.0f;
     float radians = CC_DEGREES_TO_RADIANS(-this->getRotation());
+
     Vec2 spawnPos = this->getPosition() +
         Vec2(cos(radians), sin(radians)) * offset;
+
     scene->spawnBullet(spawnPos,radians);
 }
 void Tank::update(float delta) 
@@ -132,6 +134,14 @@ void Tank::RegisterControls()
     {
         NetworkManager::getInstance()->NetworkManager::SendGameMessage(MessageType::Attack, AttackInfo{true});
         fire();
+
+        auto camera = dynamic_cast<Gamemode*> (Director::getInstance()->getRunningScene())->_camera;
+        camera->setScale(camera->getScale() + 0.03);
+        
+		//auto offset = -Vec2(cos(this->getRotation()), sin(this->getRotation()));
+        auto offset = -Vec2(sin(this->getRotation()), cos(this->getRotation()));
+        camera->setPosition(camera->getPosition() + offset * 0.05f);
+
     };
 
     _eventDispatcher->addEventListenerWithSceneGraphPriority(listener2, this);

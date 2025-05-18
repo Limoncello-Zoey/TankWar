@@ -58,6 +58,11 @@ bool Gamemode::init()
     
     this->setCameraMask((unsigned short)CameraFlag::USER1,true);
     
+    auto listener = EventListenerCustom::create("FIRE", [=](EventCustom* event) {
+        
+        Other()->fire();
+        });
+
 	this->scheduleUpdate();
 
     return true;
@@ -69,6 +74,34 @@ void Gamemode::update(float delta)
     tankPos.x = Gamemode::Self()->getPositionX();
     tankPos.y = Gamemode::Self()->getPositionY();
 	tankPos.angle = Gamemode::Self()->getRotation();
+
+    float scale = _camera->getScale();
+    float targetScale = 0.4f;
+    if (scale > targetScale)
+    {
+        scale += (targetScale - scale)*0.05f;
+        _camera->setScale(scale);
+    }
+
+    auto target = Gamemode::Self();
+    if (target) {
+        Size size = Director::getInstance()->getVisibleSize();
+        Vec2 offset = Vec2(size.width, size.height) / 2;
+		offset = offset * _camera->getScale();
+        // 目标位置
+        Vec2 targetPos = target->getPosition() - offset;
+
+        // 当前相机位置
+        Vec2 currentPos = _camera->getPosition();
+
+        // 插值系数（0.1表示10%的移动量，值越小越平滑）
+        float smoothFactor = 0.06f;
+        // 计算平滑移动后的新位置
+        Vec2 newPos = currentPos + (targetPos - currentPos) * smoothFactor;
+
+        // 设置相机新位置
+        _camera->setPosition(newPos);
+    }
     NetworkManager::getInstance()->SendGameMessage(MessageType::Position, tankPos);
 }
 
@@ -184,18 +217,19 @@ bool Gamemode::checkCollision(const Vec2& pos)
 }
 
 
-bool Gamemode::CheckPosition(const Vec2& pos)
+bool Gamemode::CheckPosition(const Vec2& pos)//输入float坐标，检查是否撞墙
 {
     Vec2 tilePos = Vec2(
-        static_cast<int>((pos.x) / GRID_SIZE),
-        static_cast<int>(pos.y / GRID_SIZE));
+        floor((pos.x) / GRID_SIZE),
+        floor(pos.y / GRID_SIZE));
     return !isWall(tilePos);
 }
 bool Gamemode::isWall(const Vec2& tilePos)
 {
-    
     int x = static_cast<int>(tilePos.x);
+    if (x < 0||x>=20) return false;
     int y = static_cast<int>(tilePos.y);
+    if (y < 0|| y >= 15) return false;
     return walls[y][x];
 }
 bool Gamemode::isCircleCollision(const Vec2& center1, float radius1, const Vec2& center2, float radius2) 

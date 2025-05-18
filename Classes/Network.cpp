@@ -285,10 +285,14 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 		}
 		case MessageType::Attack:
 		{
-			RunOnMainThread([=]() 
-			{
-				Gamemode::Other()->fire();
-			});
+			auto event = new cocos2d::EventCustom("FIRE");
+			cocos2d::Director::getInstance()->getEventDispatcher()->dispatchEvent(event);
+			event->release();
+
+			//RunOnMainThread([=]() 
+			//{
+			//	Gamemode::Other()->fire();
+			//});
 			break;
 		}
 		//收到消息意味着自己赢了

@@ -71,7 +71,6 @@ void Bullet::checkBulletCollisions()//¼ì²âÓëÌ¹¿ËÅö×²
 
 bool Bullet::handleWallCollision() 
 {
-    
     auto scene = dynamic_cast<Gamemode*>(this->getParent());
     bool bounceX = false, bounceY = false;
     Vec2 Pos = this->getPosition();

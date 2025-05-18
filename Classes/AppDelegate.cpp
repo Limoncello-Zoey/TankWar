@@ -1,5 +1,6 @@
 /****************************************************************************
- Copyright (c) 2017-2018 Xiamen Yaji Software Co., Ltd.
+ Copyright (c) 
+ 17-2018 Xiamen Yaji Software Co., Ltd.
  
  http://www.cocos2d-x.org
  
