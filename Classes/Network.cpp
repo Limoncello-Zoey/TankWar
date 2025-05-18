@@ -31,18 +31,30 @@ uint16_t GameMessage::CalculateChecksum() const
 
 NetworkManager::NetworkManager() : m_socket(0), m_run(false)
 {
+	forceExit = false;
 #ifdef _WIN32 
 	WSADATA wsaData;
 	WSAStartup(MAKEWORD(2, 2), &wsaData);
 #endif 
+	m_runThread = std::thread(&NetworkManager::ReceiveLoop, this);
+	m_broadcastRespondThread = std::thread(&NetworkManager::BroadcastResponder, this);
 }
 
 NetworkManager::~NetworkManager()
 {
+	//// 获取底层句柄
+	//HANDLE handle = static_cast<HANDLE>(m_runThread.native_handle());
+	//TerminateThread(handle, 0);
+	//handle = static_cast<HANDLE>(m_broadcastRespondThread.native_handle());
+	//TerminateThread(handle, 0);
+	forceExit = true;
+	Reset();	
+	if (m_runThread.joinable()) m_runThread.join();
+	if (m_broadcastRespondThread.joinable()) m_broadcastRespondThread.join();
+	
 #ifdef _WIN32 
 	WSACleanup();
 #endif 
-	Reset();
 }
 
 // 房主端初始化 
@@ -52,11 +64,19 @@ bool NetworkManager::HostInitialize()
 	m_socket = CreateUDPSocket(0);
 	if (m_socket == -1) return false;
 	m_port = GetPort(m_socket);
+	//接受广播的socket
+	m_bcSocket = CreateUDPSocket(BROADCAST_PORT);
+	if (m_bcSocket == -1) return false;
+
+	// 设置广播权限 
+	int broadcastEnable = 1;
+	setsockopt(m_bcSocket, SOL_SOCKET, SO_BROADCAST,
+		(char*)&broadcastEnable, sizeof(broadcastEnable));
 
 	// 启动广播响应线程 
 	m_run = true;
 	m_broadcastRespondRun = true;
-	m_broadcastRespondThread = std::thread(&NetworkManager::BroadcastResponder, this);
+
 	return true;
 }
 
@@ -75,6 +95,7 @@ bool NetworkManager::ClientInitialize()
 	if (m_socket == -1) return false;
 	m_port = GetPort(m_socket);
 
+
 	// 发送广播探测 
 	do 
 	{
@@ -89,8 +110,13 @@ bool NetworkManager::ClientInitialize()
 // run线程
 void NetworkManager::ReceiveLoop()
 {
-	while (m_run)
+	while (true)
 	{
+		if (forceExit) return;
+		if (!m_run) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(16));
+			continue;
+		}
 		sockaddr_in from;
 		int fromLen = sizeof(from);
 
@@ -110,6 +136,13 @@ void NetworkManager::ReceiveLoop()
 int NetworkManager::CreateUDPSocket(uint16_t port)
 {
 	int sock = socket(AF_INET, SOCK_DGRAM, 0);
+
+	timeval tv{ 3, 0 }; // 3秒超时 
+	setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char*)&tv, sizeof(tv));
+
+	int opt = 1;
+	setsockopt(sock, SOL_SOCKET, SO_REUSEADDR, (const char*)&opt, sizeof(opt));
+
 	sockaddr_in addr;
 	memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
@@ -126,22 +159,19 @@ int NetworkManager::CreateUDPSocket(uint16_t port)
 
 void NetworkManager::BroadcastResponder()
 {
-	//接受广播的socket
-	int bcSocket = CreateUDPSocket(BROADCAST_PORT);
-	if (bcSocket == -1) return;
 
-	// 设置广播权限 
-	int broadcastEnable = 1;
-	setsockopt(bcSocket, SOL_SOCKET, SO_BROADCAST,
-		(char*)&broadcastEnable, sizeof(broadcastEnable));
-
-	while (m_broadcastRespondRun)
+	while (true)
 	{
+		if (forceExit) return;
+		if (!m_broadcastRespondRun || m_bcSocket == 0 || m_bcSocket==-1) {
+			std::this_thread::sleep_for(std::chrono::milliseconds(16));
+			continue;
+		}
 		sockaddr_in clientAddr;
 		int addrLen = sizeof(clientAddr);
 
 		char buffer[BUFFER_SIZE];
-		if (recvfrom(bcSocket, buffer, BUFFER_SIZE, 0,
+		if (recvfrom(m_bcSocket, buffer, BUFFER_SIZE, 0,
 			(sockaddr*)&clientAddr, &addrLen) > 0)//阻塞
 		{
 			// 响应服务器信息 
@@ -280,13 +310,12 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 void NetworkManager::HostMain()
 {
 	if (!HostInitialize()) return;
-	m_runThread = std::thread(&NetworkManager::ReceiveLoop, this);
+	
 }
 
 void NetworkManager::ClientMain()
 {
 	ClientInitialize();
-	m_runThread = std::thread(&NetworkManager::ReceiveLoop, this);
 
 	// 发送加入请求 
 	ServerInfo info{ m_port };
@@ -301,22 +330,14 @@ void NetworkManager::Reset()
 {
 	//先关线程
 	m_run = false;
-	if (m_runThread.joinable())
-	{
-		//m_runThread.join();
-		m_runThread.detach();
-	}
-
 	m_broadcastRespondRun = false;
-	if (m_broadcastRespondThread.joinable())
-	{
-		//m_broadcastRespondThread.join();
-		m_broadcastRespondThread.detach();
-	}
+
 	//再关socket
 	closesocket(m_socket);
+	closesocket(m_bcSocket);
 	//再置零
 	m_socket = 0;
+	m_bcSocket = 0;
 	rec_serialNumber = 0;
 	send_serialNumber = 0;
 	m_port = 0;

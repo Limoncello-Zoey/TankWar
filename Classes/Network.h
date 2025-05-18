@@ -130,11 +130,14 @@ private:
 	void HandleMessage(const GameMessage& msg, const sockaddr_in& from);
 
 	int m_socket;
+	int m_bcSocket;
 	unsigned int rec_serialNumber;
 	unsigned int send_serialNumber;
 
 	bool m_run;
 	bool m_broadcastRespondRun = true;
+
+	bool forceExit = false; // ÍË³ö±êÖ¾
 
 	std::thread m_runThread;
 	std::thread m_broadcastRespondThread;
