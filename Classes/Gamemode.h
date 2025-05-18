@@ -21,6 +21,7 @@ public:
     
     //camera
     cocos2d::Camera* _camera;
+    cocos2d::Vec2 Tracing;
 
     //settings
     float fireCooldown = 0.0f;
@@ -56,4 +57,6 @@ public:
     static bool isCircleCollision(const cocos2d::Vec2& center1, float radius1, const cocos2d::Vec2& center2, float radius2);
     /*void Shoot();*/
     
+    void SetCamera(float radians, float scale);
+
 };

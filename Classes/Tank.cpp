@@ -134,13 +134,13 @@ void Tank::RegisterControls()
     {
         NetworkManager::getInstance()->NetworkManager::SendGameMessage(MessageType::Attack, AttackInfo{true});
         fire();
-
-        auto camera = dynamic_cast<Gamemode*> (Director::getInstance()->getRunningScene())->_camera;
+        auto scene = dynamic_cast<Gamemode*> (Director::getInstance()->getRunningScene());
+        auto camera = scene->_camera;
+        float radians = CC_DEGREES_TO_RADIANS(-this->getRotation());
+        auto direction = Vec2(cos(radians), sin(radians));
         camera->setScale(camera->getScale() + 0.03);
         
-		//auto offset = -Vec2(cos(this->getRotation()), sin(this->getRotation()));
-        auto offset = -Vec2(sin(this->getRotation()), cos(this->getRotation()));
-        camera->setPosition(camera->getPosition() + offset * 0.05f);
+		scene->Tracing = scene->Tracing - direction * 20.0f;
 
     };
 

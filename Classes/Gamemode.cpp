@@ -50,18 +50,23 @@ bool Gamemode::init()
     
     Camera::getDefaultCamera()->setVisible(false);//禁用默认相机
     auto visiblesize = Director::getInstance()->getVisibleSize();
+
     _camera=Camera::createOrthographic(visiblesize.width, visiblesize.height, 0, 1000);//自定义相机
 	_camera->setCameraFlag(CameraFlag::USER1);
     this->addChild(_camera);
-    _camera->setPosition3D(Vec3(-130, 35, 0));// 修改初始坐标
+
+   _camera->setPosition(Vec2(-130, 35));// 修改初始坐标
     _camera->setScale(0.6f);
+	Tracing = Vec2(0, 0); 
     
     this->setCameraMask((unsigned short)CameraFlag::USER1,true);
     
-    auto listener = EventListenerCustom::create("FIRE", [=](EventCustom* event) {
-        
-        Other()->fire();
+    auto listener = EventListenerCustom::create("FIRE", [this](EventCustom* event) 
+        {
+            Other()->fire();
+            event->release();
         });
+    Director::getInstance()->getEventDispatcher()->addEventListenerWithSceneGraphPriority(listener, Self());
 
 	this->scheduleUpdate();
 
@@ -84,23 +89,11 @@ void Gamemode::update(float delta)
     }
 
     auto target = Gamemode::Self();
-    if (target) {
-        Size size = Director::getInstance()->getVisibleSize();
-        Vec2 offset = Vec2(size.width, size.height) / 2;
-		offset = offset * _camera->getScale();
-        // 目标位置
-        Vec2 targetPos = target->getPosition() - offset;
-
-        // 当前相机位置
-        Vec2 currentPos = _camera->getPosition();
-
-        // 插值系数（0.1表示10%的移动量，值越小越平滑）
-        float smoothFactor = 0.06f;
-        // 计算平滑移动后的新位置
-        Vec2 newPos = currentPos + (targetPos - currentPos) * smoothFactor;
-
-        // 设置相机新位置
-        _camera->setPosition(newPos);
+    if (target) 
+    {
+        Vec2 compensate = Director::getInstance()->getVisibleSize() / 2 * _camera->getScale();
+		Tracing = Tracing + (target->getPosition() - Tracing) * 0.1f;
+        _camera->setPosition(Tracing - compensate);
     }
     NetworkManager::getInstance()->SendGameMessage(MessageType::Position, tankPos);
 }
@@ -256,4 +249,9 @@ float Gamemode::distancey(const Vec2& Pos) {
     if (walls[y - 1][x]) closedisy = Pos.y - y * GRID_SIZE;
     if (walls[y + 1][x]) closedisy = closedisy > (y + 1) * GRID_SIZE -Pos.y  ? (y + 1) * GRID_SIZE - Pos.y : closedisy;
     return closedisy;
+}
+
+void Gamemode::SetCamera(float radians, float scale)
+{
+
 }
