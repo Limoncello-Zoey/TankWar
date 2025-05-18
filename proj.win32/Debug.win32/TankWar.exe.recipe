@@ -2,7 +2,7 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-      <FullPath>E:\workwork\tank-war\proj.win32\Debug.win32\libcocos2d.dll</FullPath>
+      <FullPath>D:\Visual Studio\Project\tank-war\proj.win32\Debug.win32\libcocos2d.dll</FullPath>
     </ProjectOutput>
     <ProjectOutput>
       <FullPath>D:\Visual Studio\Project\tank-war\proj.win32\Debug.win32\TankWar.exe</FullPath>

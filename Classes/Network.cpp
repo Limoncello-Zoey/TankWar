@@ -75,6 +75,7 @@ bool NetworkManager::ClientInitialize()
 	if (m_socket == -1) return false;
 	m_port = GetPort(m_socket);
 
+
 	// ∑¢ÀÕπ„≤•ÃΩ≤‚ 
 	do 
 	{
@@ -110,6 +111,10 @@ void NetworkManager::ReceiveLoop()
 int NetworkManager::CreateUDPSocket(uint16_t port)
 {
 	int sock = socket(AF_INET, SOCK_DGRAM, 0);
+
+	timeval tv{ 3, 0 }; // 3√Î≥¨ ± 
+	setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (char*)&tv, sizeof(tv));
+
 	sockaddr_in addr;
 	memset(&addr, 0, sizeof(addr));
 	addr.sin_family = AF_INET;
