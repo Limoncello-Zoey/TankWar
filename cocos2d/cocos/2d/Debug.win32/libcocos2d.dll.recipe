@@ -2,7 +2,11 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
+<<<<<<< HEAD
+      <FullPath>D:\homework\tank-war\proj.win32\Debug.win32\libcocos2d.dll</FullPath>
+=======
       <FullPath>E:\workwork\tank-war\proj.win32\Debug.win32\libcocos2d.dll</FullPath>
+>>>>>>> 8d2d37bc20a576cf39711997e627fdd8f064019e
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
