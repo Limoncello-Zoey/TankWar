@@ -287,8 +287,6 @@ int Gamemode::MapSetUp()//返回地图id
     // 随机选择一张地图
     int mapIndex = randomInt(0, maps.size() - 1);
 
-    mapIndex = 0;
-
     walls = maps[mapIndex];
 
     // 确保坦克生成点周围没有墙

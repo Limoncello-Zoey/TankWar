@@ -2,18 +2,10 @@
 <Project>
   <ProjectOutputs>
     <ProjectOutput>
-<<<<<<< HEAD
-<<<<<<< HEAD
-      <FullPath>D:\homework\tank-war\proj.win32\Debug.win32\libcocos2d.dll</FullPath>
-=======
-      <FullPath>E:\workwork\tank-war\proj.win32\Debug.win32\libcocos2d.dll</FullPath>
->>>>>>> 8d2d37bc20a576cf39711997e627fdd8f064019e
-=======
       <FullPath>D:\Visual Studio\Project\tank-war\proj.win32\Debug.win32\libcocos2d.dll</FullPath>
->>>>>>> dev
     </ProjectOutput>
     <ProjectOutput>
-      <FullPath>D:\homework\tank-war\proj.win32\Debug.win32\TankWar.exe</FullPath>
+      <FullPath>D:\Visual Studio\Project\tank-war\proj.win32\Debug.win32\TankWar.exe</FullPath>
     </ProjectOutput>
   </ProjectOutputs>
   <ContentFiles />
