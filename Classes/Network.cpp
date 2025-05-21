@@ -177,7 +177,7 @@ void NetworkManager::BroadcastResponder()
 			(sockaddr*)&clientAddr, &addrLen) > 0)//阻塞
 		{
 			// 响应服务器信息 
-			ServerInfo info{ m_port };
+			ServerInfo info{ m_port , 1024 };
 			SendGameMessage(MessageType::ServerBroadcast, info, &clientAddr);
 		}
 	}
@@ -268,6 +268,9 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 				// 这里的代码会在UI线程中执行
 				Gamemode::_self = 1;
 				auto gameScene = Gamemode::create();
+				gameScene->_mapid = info->mapid;
+				gameScene->MapSetUp(gameScene->_mapid);
+				gameScene->setCameraMask((unsigned short)CameraFlag::USER1, true);
 				cocos2d::Director::getInstance()->replaceScene(gameScene);
 			});
 			
@@ -286,12 +289,12 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 				tilePos = Vec2(
 					floor((pos.x) / 45.0f),
 					floor(pos.y / 45.0f));
-				if (tilePos.x < 0 || tilePos.x >= 20 || tilePos.y < 0 || tilePos.y >= 15) {
+				if (tilePos.x < 0 || tilePos.x >= 20 || tilePos.y < 0 || tilePos.y >= 16) {
 					return;
 				}
-				if (pos.x == input->x && pos.y == input->y && Gamemode::Other()->getRotation() == input->angle) {
+				/*if (pos.x == input->x && pos.y == input->y && Gamemode::Other()->getRotation() == input->angle) {
 					return;
-				}
+				}*/
 				Gamemode::Other()->setPosition(input->x, input->y);
 				Gamemode::Other()->setRotation(input->angle);
 			});
@@ -323,19 +326,23 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 void NetworkManager::HostMain()
 {
 	if (!HostInitialize()) return;
-	
+	Gamemode::_self = 1;
 }
 
 void NetworkManager::ClientMain()
 {
 	ClientInitialize();
 
-	// 发送加入请求 
-	ServerInfo info{ m_port };
-	SendGameMessage(MessageType::ClientJoin, info);
 	Gamemode::_self = 2;
-	
 	auto gameScene = Gamemode::create();
+	gameScene->_mapid = gameScene->MapSetUp();
+	 
+	// 发送加入请求 
+	ServerInfo info{ m_port , gameScene->_mapid };
+	SendGameMessage(MessageType::ClientJoin, info);
+
+	gameScene->setCameraMask((unsigned short)CameraFlag::USER1, true);
+	
 	cocos2d::Director::getInstance()->replaceScene(gameScene);
 }
 

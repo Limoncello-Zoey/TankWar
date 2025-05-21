@@ -12,6 +12,7 @@ public:
     //map
     static const float GRID_SIZE;
     static std::vector<std::vector<int>> walls;
+    uint16_t _mapid;
 
     //tank
     static Tank* Tank1;
@@ -38,7 +39,15 @@ public:
 	virtual void update(float delta) override;
 
     //map
-    void MapSetUp();
+    int MapSetUp();
+    void MapSetUp(uint16_t);
+    int randomInt(int min, int max);
+
+    // 检查区域是否安全（没有墙）
+    bool isAreaSafe(int startX, int startY, int width, int height);
+
+    // 设置安全的坦克生成区域
+    void setSafeSpawnAreas();
 
     //tanks & bullets
     static Tank* Self();
@@ -57,6 +66,5 @@ public:
     static bool isCircleCollision(const cocos2d::Vec2& center1, float radius1, const cocos2d::Vec2& center2, float radius2);
     /*void Shoot();*/
     
-    void SetCamera(float radians, float scale);
 
 };

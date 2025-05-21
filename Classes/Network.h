@@ -55,6 +55,7 @@ private:
 struct ServerInfo
 {
 	uint16_t gamePort;
+	uint16_t mapid;
 };
 
 struct TankPosition
