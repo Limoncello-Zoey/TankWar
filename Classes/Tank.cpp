@@ -148,7 +148,7 @@ void Tank::RegisterControls()
         auto direction = Vec2(cos(radians), sin(radians));
         camera->setScale(camera->getScale() + 0.03);
         
-		scene->Tracing = scene->Tracing - direction * 20.0f;
+		scene->Tracing = scene->Tracing - direction * 15.0f;
 
     };
 
