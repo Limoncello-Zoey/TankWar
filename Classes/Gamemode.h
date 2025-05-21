@@ -29,6 +29,7 @@ public:
     float targetRotation;
     const cocos2d::Size BULLET_SIZE = cocos2d::Size(10, 10);
     const cocos2d::Size TANK1_SIZE = cocos2d::Size(40, 40);
+	uint16_t frameindex = 0;
 
 
     //////////FUNCTIONS//////////

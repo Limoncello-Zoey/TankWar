@@ -62,7 +62,8 @@ bool Gamemode::init()
 	Tracing = Vec2(0, 0); 
     
     this->setCameraMask((unsigned short)CameraFlag::USER1,true);
-    
+
+    frameindex = 0;
 	this->scheduleUpdate();
 
     return true;
@@ -91,7 +92,10 @@ void Gamemode::update(float delta)
         _camera->setPosition(Tracing - compensate);
     }
 
-    NetworkManager::getInstance()->SendGameMessage(MessageType::Position, tankPos);
+    if (frameindex < 1000)
+		frameindex++;
+    else 
+        NetworkManager::getInstance()->SendGameMessage(MessageType::Position, tankPos);
 }
 
 //void Gamemode::MapSetUp() 
@@ -282,6 +286,9 @@ int Gamemode::MapSetUp()//返回地图id
 
     // 随机选择一张地图
     int mapIndex = randomInt(0, maps.size() - 1);
+
+    mapIndex = 0;
+
     walls = maps[mapIndex];
 
     // 确保坦克生成点周围没有墙
