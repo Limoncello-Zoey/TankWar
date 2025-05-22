@@ -4,7 +4,6 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 
-//
 USING_NS_CC;
 
 const float ROTATION_SPEED = 360.0f;
@@ -13,6 +12,7 @@ float Tank::radius;
 //shitrgherg
 bool Tank::init() 
 {
+    
     if (!Sprite::initWithFile("Tankbody.png")) return false;
     setAnchorPoint(Vec2(0.5f, 0.5f));
     this->scheduleUpdate();

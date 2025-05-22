@@ -3,7 +3,7 @@
 #include "cocos2d.h"
 #include "Bullet.h"
 #include "Tank.h"
-
+#include "Health.h"
 
 class Gamemode : public cocos2d::Scene
 {
@@ -17,6 +17,7 @@ public:
     //tank
     static Tank* Tank1;
     static Tank* Tank2;
+    static Health* Heart1;
     static int _self;
     cocos2d::Vec2 velocity;
     
@@ -54,6 +55,7 @@ public:
     static Tank* Self();
     static Tank* Other();
     void initTank();
+    void initHeart();
     static bool CheckPosition(const cocos2d::Vec2& pos);           //¼ì²éÊÇ·ñ×²Ç½£¨f×ø±ê£©
     static bool isWall(const cocos2d::Vec2& tilePos);              //¼ì²éÊÇ·ñ×²Ç½£¨int×ø±ê£©
     float distancex(const cocos2d::Vec2& Pos);

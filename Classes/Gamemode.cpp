@@ -14,6 +14,7 @@ const float ROTATION_SPEED = 360.0f;
 const float ANGLE_THRESHOLD = 5.0f;
 Tank* Gamemode::Tank1 = nullptr;
 Tank* Gamemode::Tank2 = nullptr;
+Health* Gamemode::Heart1 = nullptr;
 int Gamemode::_self = 0;
 
 std::vector<std::vector<int>> Gamemode::walls;
@@ -47,10 +48,10 @@ bool Gamemode::init()
     /*MapSetUp();*/
     
     initTank();
-    
+    initHeart();
     //只有tank1是直接由键盘控制的，tank2由数据包控制
     
-    Camera::getDefaultCamera()->setVisible(false);//禁用默认相机
+    Camera::getDefaultCamera()->setVisible(true);//禁用默认相机
     auto visiblesize = Director::getInstance()->getVisibleSize();
 
     _camera=Camera::createOrthographic(visiblesize.width, visiblesize.height, 0, 1000);//自定义相机
@@ -449,6 +450,12 @@ void Gamemode::initTank()
     Gamemode::Tank2->setPosition(GRID_SIZE * 17.4f, GRID_SIZE * 13.4f);
     addChild(Gamemode::Tank2);
     Gamemode::Self()->RegisterControls();
+}
+void Gamemode::initHeart()
+{
+    Gamemode::Heart1 = Health::create();
+    Gamemode::Heart1->setPosition(GRID_SIZE * 18.0f, GRID_SIZE * 14.0f);
+    addChild(Gamemode::Heart1);
 }
 
 void Gamemode::spawnBullet(const Vec2& spawnPos,float radians) 
