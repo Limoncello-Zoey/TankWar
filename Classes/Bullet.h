@@ -19,4 +19,5 @@ public:
     void update(float delta) override;
     bool handleWallCollision();
 	void checkBulletCollisions();
+    bool losecondition();
 };

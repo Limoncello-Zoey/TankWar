@@ -6,6 +6,7 @@ class Gamemode;
 
 class Tank : public cocos2d::Sprite {
 public:
+    int heart = 3;
     float targetRotation;
     float fireCooldown = 0.0f;
     cocos2d::Vec2 velocity;

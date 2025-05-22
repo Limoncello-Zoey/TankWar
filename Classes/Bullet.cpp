@@ -61,14 +61,25 @@ void Bullet::checkBulletCollisions()//¼ì²âÓëÌ¹¿ËÅö×²
     
     if (Gamemode::isCircleCollision(center1, Bullet::radius, center2, Tank::radius))
     {
-        auto gameover = dynamic_cast<Gameover*>(Gameover::createScene());
-		gameover->_win = false;
-		gameover->ChangeText("You Lose!");
-        Director::getInstance()->replaceScene(gameover);
+        if (losecondition()) {
+            auto gameover = dynamic_cast<Gameover*>(Gameover::createScene());
+            gameover->_win = false;
+            gameover->ChangeText("You Lose!");
+            Director::getInstance()->replaceScene(gameover);
 
-		NetworkManager::getInstance()->SendGameMessage(MessageType::Die, true);
+            NetworkManager::getInstance()->SendGameMessage(MessageType::Die, true);
+        }
+        this->removeFromParent();
     }
  
+}
+bool Bullet::losecondition() {
+    int lastheart = Gamemode::Self()->heart;
+    if (lastheart > 1) {
+        Gamemode::Self()->heart--;
+        return false;
+    }
+    else return true;
 }
 
 bool Bullet::handleWallCollision() 
