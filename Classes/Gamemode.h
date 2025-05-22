@@ -21,9 +21,10 @@ public:
     static int _self;
     cocos2d::Vec2 velocity;
     
-    //camera
+	//camera&Layer
     cocos2d::Camera* _camera;
     cocos2d::Vec2 Tracing;
+	static cocos2d::Layer* statusLayer;
 
     //settings
     float fireCooldown = 0.0f;
