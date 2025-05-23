@@ -146,7 +146,7 @@ void Tank::RegisterControls()
         auto camera = scene->_camera;
         float radians = CC_DEGREES_TO_RADIANS(-this->getRotation());
         auto direction = Vec2(cos(radians), sin(radians));
-        camera->setScale(camera->getScale() + 0.03);
+        camera->setScale(camera->getScale() + 0.02);
         
 		scene->Tracing = scene->Tracing - direction * 15.0f;
 
