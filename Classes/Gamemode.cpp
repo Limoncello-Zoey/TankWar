@@ -5,6 +5,7 @@
 #include "SimpleAudioEngine.h"
 #include "ui/CocosGUI.h"
 #include <random> 
+#include "AudioEngine.h"
 
 
 USING_NS_CC;
@@ -47,7 +48,9 @@ bool Gamemode::init()
 {
     if (!Scene::init()) return false;
     /*MapSetUp();*/
-    
+    int bgmId = cocos2d::experimental::AudioEngine::AudioEngine::play2d("2na_fb.ogg", true);
+    cocos2d::experimental::AudioEngine::setVolume(bgmId, 0.5f);
+
     initTank();
     initHeart();
     //只有tank1是直接由键盘控制的，tank2由数据包控制

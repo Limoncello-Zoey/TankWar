@@ -4,6 +4,7 @@
 #include "Bullet.h"
 #include "Tank.h"
 #include "Health.h"
+#include "AudioEngine.h"
 
 class Gamemode : public cocos2d::Scene
 {
