@@ -48,8 +48,8 @@ bool Gamemode::init()
 {
     if (!Scene::init()) return false;
     /*MapSetUp();*/
-    int bgmId = cocos2d::experimental::AudioEngine::AudioEngine::play2d("2na_fb.ogg", true);
-    cocos2d::experimental::AudioEngine::setVolume(bgmId, 0.5f);
+    int bgmId = cocos2d::experimental::AudioEngine::AudioEngine::play2d("background.mp3", true);
+    cocos2d::experimental::AudioEngine::setVolume(bgmId, 0.4f);
 
     initTank();
     initHeart();
@@ -83,7 +83,7 @@ void Gamemode::update(float delta)
 	tankPos.angle = Gamemode::Self()->getRotation();
 
     float scale = _camera->getScale();
-    float targetScale = 0.4f;
+    float targetScale = 0.5f;
     if (scale > targetScale)
     {
         scale += (targetScale - scale)*0.05f;

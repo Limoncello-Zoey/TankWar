@@ -3,6 +3,7 @@
 #include "Gamemode.h"
 #include "Gameover.h"
 #include "Tank.h"
+#include "AudioEngine.h"
 
 using namespace cocos2d;
 
@@ -317,6 +318,7 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 				gameover->ChangeText("You Win!");
 				cocos2d::Director::getInstance()->replaceScene(gameover);
 				//this->removeFromParent();
+				cocos2d::experimental::AudioEngine::end();
 			});
 			break;
 		}
