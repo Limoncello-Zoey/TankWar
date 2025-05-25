@@ -63,7 +63,7 @@ void Bullet::checkBulletCollisions()//¼ì²âÓëÌ¹¿ËÅö×²
     {
         if (losecondition()) 
         {
-            cocos2d::experimental::AudioEngine::stopAll();
+            cocos2d::experimental::AudioEngine::end();
             auto gameover = dynamic_cast<Gameover*>(Gameover::createScene());
             gameover->_win = false;
             gameover->ChangeText("You Lose!");
