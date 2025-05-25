@@ -318,7 +318,7 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 				gameover->ChangeText("You Win!");
 				cocos2d::Director::getInstance()->replaceScene(gameover);
 				//this->removeFromParent();
-				cocos2d::experimental::AudioEngine::end();
+				cocos2d::experimental::AudioEngine::stopAll();
 			});
 			break;
 		}
