@@ -15,8 +15,10 @@ bool Tank::init()
     
     if (!Sprite::initWithFile("Tankbody.png")) return false;
     setAnchorPoint(Vec2(0.5f, 0.5f));
+    // 固定缩放大小（示例：缩放为原始尺寸的 0.8 倍，根据需求调整）
+    this->setScale(0.15f);
     this->scheduleUpdate();
-	radius = this->getContentSize().width / 2;
+	radius = 30.0f;
     return true;
 }
 

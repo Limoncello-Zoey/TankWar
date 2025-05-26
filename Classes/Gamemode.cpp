@@ -49,8 +49,9 @@ bool Gamemode::init()
     auto visibleSize = Director::getInstance()->getVisibleSize();
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
-    Sprite* background = Sprite::create("grass.png");
+    Sprite* background = Sprite::create("grass.jpg");
     background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+    background->setScale(0.5F);
     this->addChild(background, 0);
 
 
