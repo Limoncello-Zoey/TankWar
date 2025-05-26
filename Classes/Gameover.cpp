@@ -15,7 +15,7 @@ bool Gameover::init()
     if (!Scene::init()) return false;
 	auto visiblesize = Director::getInstance()->getVisibleSize();
 
-	label = Label::createWithTTF("Game Over", "fonts/Marker Felt.ttf", 60);
+	label = Label::createWithTTF("Game Over", "fonts/PixelMplus12-Bold.ttf", 60);
 	label->setPosition(Vec2(visiblesize.width / 2, visiblesize.height / 2 + 100));
 	label->setColor(Color3B(255, 255, 255));
 	this->addChild(label, 1);

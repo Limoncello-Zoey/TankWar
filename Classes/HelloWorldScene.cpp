@@ -56,7 +56,7 @@ bool HelloWorld::init()
     background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
     this->addChild(background, 0); 
 
-    CCMenuItemLabel* gamestartItem = CCMenuItemLabel::create(CCLabelTTF::create("GameStart","Arial",60),this,menu_selector(HelloWorld::menuStartCallback));
+    CCMenuItemLabel* gamestartItem = CCMenuItemLabel::create(CCLabelTTF::create("GameStart","fonts/arial.ttf",60),this,menu_selector(HelloWorld::menuStartCallback));
     gamestartItem->setPosition(Vec2(visibleSize.width / 2, 135));
     CCMenu* startmenu = CCMenu::createWithItem(gamestartItem);
     startmenu->setPosition(Vec2::ZERO);
