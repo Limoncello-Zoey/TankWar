@@ -10,7 +10,7 @@
 
 USING_NS_CC;
 
-const float Gamemode::GRID_SIZE = 45.0f;
+const float Gamemode::GRID_SIZE = 60.0f;
 const float ROTATION_SPEED = 360.0f;   
 const float ANGLE_THRESHOLD = 5.0f;
 Tank* Gamemode::Tank1 = nullptr;
@@ -305,14 +305,18 @@ int Gamemode::MapSetUp()//返回地图id
     {
         for (int x = 0; x < walls[y].size(); ++x)
         {
-            if (walls[y][x] == 1)
-            {
-                Vec2 pos(x * GRID_SIZE, +y * GRID_SIZE);
-                drawNode->drawSolidRect(
-                    pos,
-                    pos + Vec2(GRID_SIZE, GRID_SIZE),
-                    WALL_COLOR
-                );
+            if (walls[y][x] == 1) {
+                Vec2 pos(x * GRID_SIZE, y * GRID_SIZE); // 网格坐标转世界坐标
+
+                // 创建墙体 Sprite（假设素材名为 "wall.png"）
+                auto wallSprite = Sprite::create("wall.png");
+
+                // 调整 Sprite 大小以适配 GRID_SIZE
+                wallSprite->setScale(GRID_SIZE / wallSprite->getContentSize().width);
+                wallSprite->setPosition(pos + Vec2(GRID_SIZE / 2, GRID_SIZE / 2)); // 中心点对齐网格中心
+                wallSprite->setCameraMask((unsigned short)CameraFlag::USER1); // 与相机层级匹配
+
+                addChild(wallSprite); // 添加到场景
             }
         }
     }
@@ -431,14 +435,18 @@ void Gamemode::MapSetUp(uint16_t mapid)
     {
         for (int x = 0; x < walls[y].size(); ++x)
         {
-            if (walls[y][x] == 1)
-            {
-                Vec2 pos(x * GRID_SIZE, +y * GRID_SIZE);
-                drawNode->drawSolidRect(
-                    pos,
-                    pos + Vec2(GRID_SIZE, GRID_SIZE),
-                    WALL_COLOR
-                );
+            if (walls[y][x] == 1) {
+                Vec2 pos(x * GRID_SIZE, y * GRID_SIZE); // 网格坐标转世界坐标
+
+                // 创建墙体 Sprite（假设素材名为 "wall.png"）
+                auto wallSprite = Sprite::create("wall.png");
+
+                // 调整 Sprite 大小以适配 GRID_SIZE
+                wallSprite->setScale(GRID_SIZE / wallSprite->getContentSize().width);
+                wallSprite->setPosition(pos + Vec2(GRID_SIZE / 2, GRID_SIZE / 2)); // 中心点对齐网格中心
+                wallSprite->setCameraMask((unsigned short)CameraFlag::USER1); // 与相机层级匹配
+
+                addChild(wallSprite); // 添加到场景
             }
         }
     }
