@@ -8,11 +8,16 @@ using namespace network;
 
 bool WaitingHall::init()
 {
+	auto visibleSize = Director::getInstance()->getVisibleSize();
+	Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
 	if (!Scene::init()) return false;
 
 	auto VisibleSize = Director::getInstance()->getVisibleSize();
-	auto origin = Director::getInstance()->getVisibleOrigin();
 
+	Sprite* background = Sprite::create("background2.png");
+	background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	this->addChild(background, 0);
 
 	// add buttons
 	auto CreateButton = Button::create("CreateRoomNormal.png", "CreateRoomSelected.png");
