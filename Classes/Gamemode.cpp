@@ -46,6 +46,14 @@ Scene* Gamemode::createScene()
 
 bool Gamemode::init()
 {
+    auto visibleSize = Director::getInstance()->getVisibleSize();
+    Vec2 origin = Director::getInstance()->getVisibleOrigin();
+
+    Sprite* background = Sprite::create("grass.png");
+    background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+    this->addChild(background, 0);
+
+
     if (!Scene::init()) return false;
     /*MapSetUp();*/
     int bgmId = cocos2d::experimental::AudioEngine::AudioEngine::play2d("background.mp3", true);
