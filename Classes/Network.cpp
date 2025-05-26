@@ -312,13 +312,14 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 		case MessageType::Die:
 		{
 			RunOnMainThread([=]()
-			{
+			{////////
 				auto gameover = dynamic_cast<Gameover*>(Gameover::createScene());
 				gameover->_win = true;
 				gameover->ChangeText("You Win!");
 				cocos2d::Director::getInstance()->replaceScene(gameover);
 				//this->removeFromParent();
 				cocos2d::experimental::AudioEngine::stopAll();
+				///////////
 			});
 			break;
 		}
