@@ -61,16 +61,12 @@ void Bullet::checkBulletCollisions()//¼ì²âÓëÌ¹¿ËÅö×²
     
     if (Gamemode::isCircleCollision(center1, Bullet::radius, center2, Tank::radius))
     {
-        if (losecondition()) 
-        {//////////
+        if (losecondition()) {
             cocos2d::experimental::AudioEngine::stopAll();
             auto gameover = dynamic_cast<Gameover*>(Gameover::createScene());
-            gameover->_win = false;
-            gameover->ChangeText("You Lose!");
+            gameover->ShowResultImage(false); // ÏÔÊ¾Ê§°ÜÍ¼Æ¬
             Director::getInstance()->replaceScene(gameover);
-
             NetworkManager::getInstance()->SendGameMessage(MessageType::Die, true);
-            //////////
         }
         this->removeFromParent();
     }

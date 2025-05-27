@@ -309,18 +309,13 @@ void NetworkManager::HandleMessage(const GameMessage& msg, const sockaddr_in& fr
 			break;
 		}
 		//收到消息意味着自己赢了
-		case MessageType::Die:
-		{
-			RunOnMainThread([=]()
-			{////////
+		case MessageType::Die: {
+			RunOnMainThread([=]() {
 				auto gameover = dynamic_cast<Gameover*>(Gameover::createScene());
-				gameover->_win = true;
-				gameover->ChangeText("You Win!");
-				cocos2d::Director::getInstance()->replaceScene(gameover);
-				//this->removeFromParent();
+				gameover->ShowResultImage(true); // 显示胜利图片
+				Director::getInstance()->replaceScene(gameover);
 				cocos2d::experimental::AudioEngine::stopAll();
-				///////////
-			});
+				});
 			break;
 		}
 	}
