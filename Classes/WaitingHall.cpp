@@ -1,7 +1,7 @@
 #include "WaitingHall.h"
-
+#include "HelloWorldScene.h"
 #include "Gamemode.h"
-using namespace std;
+#include "ui/CocosGUI.h"
 using namespace cocos2d;
 using namespace ui;
 using namespace network;
@@ -15,45 +15,44 @@ bool WaitingHall::init()
 
 	auto VisibleSize = Director::getInstance()->getVisibleSize();
 
-	Sprite* background = Sprite::create("background2.png");
-	background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
-	this->addChild(background, 0);
+
+	// 创建关闭菜单项
+	auto creatMatch = MenuItemLabel::create(
+		Label::createWithTTF("Create Match", "fonts/arial.ttf", 60),
+		CC_CALLBACK_1(WaitingHall::onCreateRoomClicked, this)
+	);
+	creatMatch->setPosition(Vec2(visibleSize.width / 2, 150));
+
+	// 创建游戏开始菜单项
+	auto joinMatch = MenuItemLabel::create(
+		Label::createWithTTF("Join Match", "fonts/arial.ttf", 60),
+		CC_CALLBACK_1(WaitingHall::onJoinRoomClicked, this)
+	);
+	joinMatch->setPosition(Vec2(visibleSize.width / 2, 250));
+
+	// 创建包含两个菜单项的菜单
+	auto menu = Menu::create(creatMatch, joinMatch, NULL);
+	menu->setPosition(Vec2(0, 50));
+	this->addChild(menu, 2);
 
 	// add buttons
-	auto CreateButton = Button::create("CreateRoomNormal.png", "CreateRoomSelected.png");
+	/*auto CreateButton = Button::create("CreateRoomNormal.png", "CreateRoomSelected.png");
 	auto JoinButton = Button::create("JoinRoomNormal.png", "JoinRoomSelected.png");
-	//auto DemoButton = Button::create("DemoNormal.png", "DemoSelected.png");
 
 	CreateButton->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 + 100-300));
 	JoinButton->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 - 100-300));
-	//DemoButton->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 + 300 - 300));
 
 	CreateButton->addTouchEventListener(CC_CALLBACK_2(WaitingHall::onCreateRoomClicked, this));
 	JoinButton->addTouchEventListener(CC_CALLBACK_2(WaitingHall::onJoinRoomClicked, this));
-	//DemoButton->addTouchEventListener(CC_CALLBACK_2(WaitingHall::onDemoClicked, this));
 
 	this->addChild(CreateButton);
-	this->addChild(JoinButton);
-	//this->addChild(DemoButton);
+	this->addChild(JoinButton);*/
 
 
 
-	// Create labels for buttons
-	
-	//auto label1 = Label::createWithTTF("Create Room", "fonts/Marker Felt.ttf", 24);
-	//label1->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 + 100 - 200));
-	//auto label2 = Label::createWithTTF("Join Room", "fonts/Marker Felt.ttf", 24);
-	//label2->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2 - 100 - 200));
-	//auto label1 = Label::createWithTTF("Create Room", "fonts/Marker Felt.ttf", 48);
-	//label1->setPosition(Vec2(0, 0));
-	//auto label2 = Label::createWithTTF("Join Room", "fonts/Marker Felt.ttf", 48);
-	//label2->setPosition(Vec2(0, 0));
-	//CreateButton->addChild(label1);
-	//JoinButton->addChild(label2);
-
-	// create background
-	//auto background = Sprite::create("background.png");
-	//background->setPosition(Vec2(VisibleSize.width / 2, VisibleSize.height / 2));
+	Sprite* background = Sprite::create("background2.png");
+	background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
+	this->addChild(background, 0);
 
 	NetworkManager::getInstance()->Reset();
 
@@ -65,20 +64,20 @@ Scene* WaitingHall::createScene()
 	return WaitingHall::create();
 }
 
-void WaitingHall::onCreateRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType type)
+void WaitingHall::onCreateRoomClicked(Ref* pSender)
 {
-	if (type != ui::Widget::TouchEventType::ENDED)
-		return;
+	/*if (type != ui::Widget::TouchEventType::ENDED)
+		return;*/
 	// Handle create room button click
 	NetworkManager::getInstance()->HostMain();
 
 
 }
 
-void WaitingHall::onJoinRoomClicked(Ref* sender, cocos2d::ui::Widget::TouchEventType type)
+void WaitingHall::onJoinRoomClicked(Ref* pSender)
 {
-	if (type != ui::Widget::TouchEventType::ENDED) 
-		return;
+	/*if (type != ui::Widget::TouchEventType::ENDED) 
+		return;*/
 	NetworkManager::getInstance()->ClientMain();
 	// Handle join room button click
 }

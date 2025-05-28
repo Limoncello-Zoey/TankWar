@@ -30,37 +30,29 @@ bool HelloWorld::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     
-    /////////////////////////////
-    // 2. add a menu item with "X" image, which is clicked to quit the program
-    //    you may modify it.
+    // 创建关闭菜单项
+    auto closeItem = MenuItemLabel::create(
+        Label::createWithTTF("Quit", "fonts/arial.ttf", 60),
+        CC_CALLBACK_1(HelloWorld::menuCloseCallback, this)
+    );
+    closeItem->setPosition(Vec2(visibleSize.width / 2, 150));
 
-    // add a "close" icon to exit the progress. it's an autorelease object
-    auto closeItem = CCMenuItemLabel::create(CCLabelTTF::create("Quit", "Arial", 60), this, menu_selector(HelloWorld::menuCloseCallback));
+    // 创建游戏开始菜单项
+    auto gamestartItem = MenuItemLabel::create(
+        Label::createWithTTF("Start", "fonts/arial.ttf", 60),
+        CC_CALLBACK_1(HelloWorld::menuStartCallback, this)
+    );
+    gamestartItem->setPosition(Vec2(visibleSize.width / 2, 250));
 
-    if (closeItem == nullptr ||
-        closeItem->getContentSize().width <= 0 ||
-        closeItem->getContentSize().height <= 0)
-    {
-        problemLoading("'CloseNormal.png' and 'CloseSelected.png'");
-    }
-    else
-    {
-        float x = origin.x + visibleSize.width - closeItem->getContentSize().width/2;
-        float y = origin.y + closeItem->getContentSize().height/2;
-        closeItem->setPosition(Vec2(visibleSize.width / 2,55));
-    }
-    auto menu = Menu::create(closeItem, NULL);
-    menu->setPosition(Vec2::ZERO);
+    // 创建包含两个菜单项的菜单
+    auto menu = Menu::create(closeItem, gamestartItem, NULL);
+    menu->setPosition(Vec2(0,50));
     this->addChild(menu, 2);
+
+
     Sprite* background = Sprite::create("background.png");
     background->setPosition(visibleSize.width / 2, visibleSize.height / 2);
     this->addChild(background, 0); 
-
-    CCMenuItemLabel* gamestartItem = CCMenuItemLabel::create(CCLabelTTF::create("GameStart","fonts/arial.ttf",60),this,menu_selector(HelloWorld::menuStartCallback));
-    gamestartItem->setPosition(Vec2(visibleSize.width / 2, 135));
-    CCMenu* startmenu = CCMenu::createWithItem(gamestartItem);
-    startmenu->setPosition(Vec2::ZERO);
-    this->addChild(startmenu,2);
     return true;
 }
 
