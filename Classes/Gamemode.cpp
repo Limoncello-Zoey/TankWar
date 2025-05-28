@@ -107,7 +107,7 @@ void Gamemode::update(float delta)
         _camera->setPosition(Tracing - compensate);
     }
 
-    if (frameindex < 1000)
+    if (frameindex < 200)
 		frameindex++;
     else 
         NetworkManager::getInstance()->SendGameMessage(MessageType::Position, tankPos);

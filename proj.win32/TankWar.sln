@@ -14,11 +14,9 @@ Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "libSpine", "..\cocos2d\coco
 EndProject
 Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "librecast", "..\cocos2d\external\recast\proj.win32\librecast.vcxproj", "{41E34993-647E-4282-8384-4AB1AE31A452}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "TankWar!", "..\TankWar!\TankWar!.vdproj", "{CB6C3744-E4D7-7CF6-4E7D-0C2F174B38A7}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup666", "..\Setup666\Setup666.vdproj", "{1A70805C-4745-D612-24BD-FE730885242F}"
 EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "TWSetup", "..\TWSetup\TWSetup.vdproj", "{7317275A-25EC-E809-36AC-FACE0D3F79DD}"
-EndProject
-Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "Setup", "..\Setup\Setup.vdproj", "{4D1AC582-8087-5490-FCC2-03CEC5D22547}"
+Project("{54435603-DBB4-11D2-8724-00A0C9A8B90C}") = "TankWarSetup", "..\TankWarSetup\TankWarSetup.vdproj", "{5DBD4A02-A9E6-57C5-0B64-351C53AD3B8B}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,12 +40,10 @@ Global
 		{41E34993-647E-4282-8384-4AB1AE31A452}.Debug|Win32.Build.0 = Debug|Win32
 		{41E34993-647E-4282-8384-4AB1AE31A452}.Release|Win32.ActiveCfg = Release|Win32
 		{41E34993-647E-4282-8384-4AB1AE31A452}.Release|Win32.Build.0 = Release|Win32
-		{CB6C3744-E4D7-7CF6-4E7D-0C2F174B38A7}.Debug|Win32.ActiveCfg = Debug
-		{CB6C3744-E4D7-7CF6-4E7D-0C2F174B38A7}.Release|Win32.ActiveCfg = Release
-		{7317275A-25EC-E809-36AC-FACE0D3F79DD}.Debug|Win32.ActiveCfg = Debug
-		{7317275A-25EC-E809-36AC-FACE0D3F79DD}.Release|Win32.ActiveCfg = Release
-		{4D1AC582-8087-5490-FCC2-03CEC5D22547}.Debug|Win32.ActiveCfg = Debug
-		{4D1AC582-8087-5490-FCC2-03CEC5D22547}.Release|Win32.ActiveCfg = Release
+		{1A70805C-4745-D612-24BD-FE730885242F}.Debug|Win32.ActiveCfg = Debug
+		{1A70805C-4745-D612-24BD-FE730885242F}.Release|Win32.ActiveCfg = Release
+		{5DBD4A02-A9E6-57C5-0B64-351C53AD3B8B}.Debug|Win32.ActiveCfg = Debug
+		{5DBD4A02-A9E6-57C5-0B64-351C53AD3B8B}.Release|Win32.ActiveCfg = Release
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
