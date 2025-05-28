@@ -16,19 +16,27 @@ bool WaitingHall::init()
 	auto VisibleSize = Director::getInstance()->getVisibleSize();
 
 
-	// 创建关闭菜单项
-	auto creatMatch = MenuItemLabel::create(
-		Label::createWithTTF("Create Match", "fonts/arial.ttf", 60),
+	// 修改后的创建房间按钮
+	auto creatMatch = MenuItemImage::create(
+		"button_normal.png",
+		"button_pressed.png",
 		CC_CALLBACK_1(WaitingHall::onCreateRoomClicked, this)
 	);
-	creatMatch->setPosition(Vec2(visibleSize.width / 2, 150));
+	creatMatch->setPosition(Vec2(visibleSize.width / 2, 400));
+	auto createLabel = Label::createWithTTF("Create Match", "fonts/arial.ttf", 60);
+	createLabel->setPosition(creatMatch->getContentSize().width / 2, creatMatch->getContentSize().height / 2);
+	creatMatch->addChild(createLabel);
 
-	// 创建游戏开始菜单项
-	auto joinMatch = MenuItemLabel::create(
-		Label::createWithTTF("Join Match", "fonts/arial.ttf", 60),
+	// 修改后的加入房间按钮
+	auto joinMatch = MenuItemImage::create(
+		"button_normal.png",
+		"button_pressed.png",
 		CC_CALLBACK_1(WaitingHall::onJoinRoomClicked, this)
 	);
-	joinMatch->setPosition(Vec2(visibleSize.width / 2, 250));
+	joinMatch->setPosition(Vec2(visibleSize.width / 2, 650));
+	auto joinLabel = Label::createWithTTF("Join Match", "fonts/arial.ttf", 60);
+	joinLabel->setPosition(joinMatch->getContentSize().width / 2, joinMatch->getContentSize().height / 2);
+	joinMatch->addChild(joinLabel);
 
 	// 创建包含两个菜单项的菜单
 	auto menu = Menu::create(creatMatch, joinMatch, NULL);

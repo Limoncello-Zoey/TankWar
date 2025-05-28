@@ -30,19 +30,29 @@ bool HelloWorld::init()
     Vec2 origin = Director::getInstance()->getVisibleOrigin();
 
     
-    // 创建关闭菜单项
-    auto closeItem = MenuItemLabel::create(
-        Label::createWithTTF("Quit", "fonts/arial.ttf", 60),
+    // 修改后的关闭按钮
+    auto closeItem = MenuItemImage::create(
+        "button_normal.png",      // 正常状态图片
+        "button_pressed.png",     // 按下状态图片
         CC_CALLBACK_1(HelloWorld::menuCloseCallback, this)
     );
-    closeItem->setPosition(Vec2(visibleSize.width / 2, 150));
+    // 设置按钮位置
+    closeItem->setPosition(Vec2(visibleSize.width / 2, 180));
+    // 添加文字标签
+    auto quitLabel = Label::createWithTTF("Quit", "fonts/arial.ttf", 60);
+    quitLabel->setPosition(closeItem->getContentSize().width / 2, closeItem->getContentSize().height / 2);
+    closeItem->addChild(quitLabel);
 
-    // 创建游戏开始菜单项
-    auto gamestartItem = MenuItemLabel::create(
-        Label::createWithTTF("Start", "fonts/arial.ttf", 60),
+    // 修改后的开始按钮
+    auto gamestartItem = MenuItemImage::create(
+        "button_normal.png",
+        "button_pressed.png",
         CC_CALLBACK_1(HelloWorld::menuStartCallback, this)
     );
-    gamestartItem->setPosition(Vec2(visibleSize.width / 2, 250));
+    gamestartItem->setPosition(Vec2(visibleSize.width / 2, 320));
+    auto startLabel = Label::createWithTTF("Start", "fonts/arial.ttf", 60);
+    startLabel->setPosition(gamestartItem->getContentSize().width / 2, gamestartItem->getContentSize().height / 2);
+    gamestartItem->addChild(startLabel);
 
     // 创建包含两个菜单项的菜单
     auto menu = Menu::create(closeItem, gamestartItem, NULL);
